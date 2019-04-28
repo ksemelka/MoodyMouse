@@ -26,6 +26,8 @@ void turnLeftPID(void);
 void turnRight(void);
 void turnRightPID(void);
 void turnAround(void);
+void turnAroundLeft(void);
+void turnAroundRight(void);
 void turnLeftCurve(void);
 void turnRightCurve(void);
 

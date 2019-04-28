@@ -192,8 +192,36 @@ void turnRightPID() {
 }
 
 void turnAround() {
+	switch(nextCellState) {
+	case FRONT:
+		turnLeftPID();
+		turnLeftPID();
+		break;
+	case RIGHT:
+		turnAroundRight();
+		break;
+	case LEFT:
+		turnAroundLeft();
+		break;
+	case FRONT + RIGHT:
+		turnAroundRight();
+		break;
+	case FRONT + LEFT:
+		turnAroundLeft();
+		break;
+	case RIGHT + LEFT:
+		turnAroundLeft();
+		break;
+	case FRONT + RIGHT + LEFT:
+		turnAroundLeft();
+		break;
+	}
+}
+
+void turnAroundLeft() {
 	turnLeftPID();
 	
+	// Adjust position in cell using left wall
 	pid = false;
 	curt = millis();
 	while ((millis() - curt) < 600) {
@@ -203,6 +231,21 @@ void turnAround() {
 	resetPID();
 	
 	turnLeftPID();
+}
+
+void turnAroundRight() {
+	turnRightPID();
+	
+	// Adjust position in cell using right wall
+	pid = false;
+	curt = millis();
+	while ((millis() - curt) < 600) {
+		adjuster();
+	}
+	pid = true;
+	resetPID();
+	
+	turnRightPID();
 }
 
 void turnLeftCurve() {
