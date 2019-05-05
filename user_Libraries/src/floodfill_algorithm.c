@@ -18,7 +18,8 @@ int current_y;
 int change_x;
 int change_y;
 
-void floodfill_algorithm(void) {
+void floodfill_algorithm(void)
+{
 	/*graph maze(16);
 	maze.populate();
   	maze.initialize();
@@ -131,7 +132,14 @@ void floodfill_algorithm(void) {
 	//
 	//(15,0)	(15,15)
 	//--------------
-	
+
+	// Maze orientation
+	//--------------
+	//(0,0)		(15,0)
+	//
+	//(0,15)	(15,15)
+	//--------------
+
 	init_adjacency();
 	assign_dist();
 	Stack_Init(s);
@@ -140,15 +148,14 @@ void floodfill_algorithm(void) {
 	// pair<int, int> start (0, 0);
 	// pair(int, int) goal (7, 7);
 	// pair(int, int) current(0, 0);
-	
-	
+
 	start_x = 0;
 	start_y = 15;
 	goal_x = 7;
 	goal_y = 7;
 	current_x = start_x;
 	current_y = start_y;
-	
+
 	// Hardcode first cell
 	// Left
 	/*maze_wallinput(current_x, current_y, (orientation + 3) % 4);
@@ -171,61 +178,67 @@ void floodfill_algorithm(void) {
 
 	moveOneCell();
 */
-	while (current_x != goal_x || current_y != goal_y) {
+	while (current_x != goal_x || current_y != goal_y)
+	{
 		printf("%d, %d\n", current_x, current_y);
-		if ((orientation % 4) < 0) {
+		if ((orientation % 4) < 0)
+		{
 			orientation = (orientation % 4) + 4;
 		}
-		else {
+		else
+		{
 			orientation = orientation % 4;
 		}
-		switch(nextCellState) {
-			case 0:
-				break;
-			case FRONT:
-				maze_wallinput(current_x, current_y, (orientation + 0) % 4);
-				break;
-			case RIGHT:
-				maze_wallinput(current_x, current_y, (orientation + 1) % 4);
-				break;
-			case LEFT:
-				maze_wallinput(current_x, current_y, (orientation + 3) % 4);
-				break;
-			case FRONT + RIGHT:
-				// Front
-				maze_wallinput(current_x, current_y, (orientation + 0) % 4);
-				// Right
-				maze_wallinput(current_x, current_y, (orientation + 1) % 4);
-				break;
-			case FRONT + LEFT:
-				// Front
-				maze_wallinput(current_x, current_y, (orientation + 0) % 4);
-				// Left
-				maze_wallinput(current_x, current_y, (orientation + 3)% 4);
-				break;
-			case RIGHT + LEFT:
-				// Right
-				maze_wallinput(current_x, current_y, (orientation + 1) % 4);
-				// Left
-				maze_wallinput(current_x, current_y, (orientation + 3) % 4);
-				break;
-			case FRONT + RIGHT + LEFT:
-				// Front
-				maze_wallinput(current_x, current_y, (orientation + 0) % 4);
-				// Right
-				maze_wallinput(current_x, current_y, (orientation + 1) % 4);
-				// Left
-				maze_wallinput(current_x, current_y, (orientation + 3) % 4);
-				break;
-			default:
-				break;
+		switch (nextCellState)
+		{
+		case 0:
+			break;
+		case FRONT:
+			maze_wallinput(current_x, current_y, (orientation + 0) % 4);
+			break;
+		case RIGHT:
+			maze_wallinput(current_x, current_y, (orientation + 1) % 4);
+			break;
+		case LEFT:
+			maze_wallinput(current_x, current_y, (orientation + 3) % 4);
+			break;
+		case FRONT + RIGHT:
+			// Front
+			maze_wallinput(current_x, current_y, (orientation + 0) % 4);
+			// Right
+			maze_wallinput(current_x, current_y, (orientation + 1) % 4);
+			break;
+		case FRONT + LEFT:
+			// Front
+			maze_wallinput(current_x, current_y, (orientation + 0) % 4);
+			// Left
+			maze_wallinput(current_x, current_y, (orientation + 3) % 4);
+			break;
+		case RIGHT + LEFT:
+			// Right
+			maze_wallinput(current_x, current_y, (orientation + 1) % 4);
+			// Left
+			maze_wallinput(current_x, current_y, (orientation + 3) % 4);
+			break;
+		case FRONT + RIGHT + LEFT:
+			// Front
+			maze_wallinput(current_x, current_y, (orientation + 0) % 4);
+			// Right
+			maze_wallinput(current_x, current_y, (orientation + 1) % 4);
+			// Left
+			maze_wallinput(current_x, current_y, (orientation + 3) % 4);
+			break;
+		default:
+			break;
 		}
 
 		// maze_update returns vertex c
 		c = floodfill(current_x, current_y);
 
-		if (current_x == 7 || current_x == 8) {
-			if (current_y == 7 || current_y == 8) {
+		if (current_x == 7 || current_x == 8)
+		{
+			if (current_y == 7 || current_y == 8)
+			{
 				targetSpeedX = 0;
 				targetSpeedW = 0;
 				LED_Fancy_On();
@@ -247,73 +260,117 @@ void floodfill_algorithm(void) {
 		}
 		change_x = current_x - c.x;
 		change_y = current_y - c.y;
-		
-		
+
 		printf("..%d, %d\n", c.x, c.y);
-//		printf("o: %d", orientation);
+		//		printf("o: %d", orientation);
 
 		// Check orientation to make mouse point in correct direction
-		if (change_x == -1) {
-			while ((orientation % 4) != 1) {
-				printf("1: %d\n", orientation);
+		if (change_x == -1) //move East
+		{
+			while ((orientation % 4) != 1)
+			{
+				// printf("1: %d\n", orientation);
 				targetSpeedX = 0;
 				useSensors = false;
 				delay_ms(300);
-				if (orientation == 0) {
+				// turnRightPID();
+				if (orientation == 0)
+				{
 					turnRightPID();
 				}
-				else if (orientation == 1) {
-					turnAround();
-				}
-				else {
+				else
+				{
 					turnLeftPID();
 				}
-			}
-		}
-		else if (change_x == 1) {
-			while ((orientation % 4) != 3) {
-				targetSpeedX = 0;
-				useSensors = false;
-				delay_ms(300);
-				turnLeftPID();
-				
-				printf("2: %d\n", orientation);
-				if ((orientation % 4) < 0) {
+				if ((orientation % 4) < 0)
+				{
 					orientation = (orientation % 4) + 4;
 				}
-				else {
+				else
+				{
 					orientation = orientation % 4;
 				}
 			}
 		}
-		else if (change_y == -1) {
-			while ((orientation % 4)!= 2) {
+		else if (change_x == 1) //move West
+		{
+			while ((orientation % 4) != 3)
+			{
 				targetSpeedX = 0;
 				useSensors = false;
 				delay_ms(300);
-				
-				turnLeftPID();
-				printf("3: %d\n", orientation);
-				if ((orientation % 4) < 0) {
+				// turnLeftPID();
+				if (orientation == 0)
+				{
+					turnLeftPID();
+				}
+				else
+				{
+					turnRightPID();
+				}
+
+				// printf("2: %d\n", orientation);
+				if ((orientation % 4) < 0)
+				{
 					orientation = (orientation % 4) + 4;
 				}
-				else {
+				else
+				{
 					orientation = orientation % 4;
 				}
-				
 			}
 		}
-		else if (change_y == 1) {
-			while ((orientation % 4) != 0) {
+		else if (change_y == -1) //move South
+		{
+			while ((orientation % 4) != 2)
+			{
 				targetSpeedX = 0;
 				useSensors = false;
 				delay_ms(300);
-				turnLeftPID();
-				printf("4: %d\n", orientation);
-				if ((orientation % 4) < 0) {
+
+				// turnLeftPID();
+				if (orientation == 3)
+				{
+					turnLeftPID();
+				}
+				else
+				{
+					turnRightPID();
+				}
+				// printf("3: %d\n", orientation);
+				if ((orientation % 4) < 0)
+				{
 					orientation = (orientation % 4) + 4;
 				}
-				else {
+				else
+				{
+					orientation = orientation % 4;
+				}
+			}
+		}
+		else if (change_y == 1) //move North
+		{
+			while ((orientation % 4) != 0)
+			{
+				targetSpeedX = 0;
+				useSensors = false;
+				delay_ms(300);
+				// turnLeftPID();
+				if (orientation == 1)
+				{
+					turnLeftPID();
+				}
+				else
+				{
+					turnRightPID();
+				}
+				// printf("4: %d\n", orientation);
+				if ((orientation % 4) < 0)
+				{
+					orientation = (orientation % 4) + 4;
+				}
+				else
+				{
 					orientation = orientation % 4;
 				}
 			}
