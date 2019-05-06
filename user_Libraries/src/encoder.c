@@ -78,9 +78,8 @@ void updateEncoderStatus() {
 	
 	leftEncoderChange = leftEncoder - leftEncoderOld;
 	rightEncoderChange = rightEncoder - rightEncoderOld;
-	//Need to account for wheel size difference to make it go straight
 	
-	encoderChange = (leftEncoderChange + rightEncoderChange);
+	encoderChange = (double)(leftEncoderChange + rightEncoderChange) / 2;
 
 	leftEncoderOld = leftEncoder;
 	rightEncoderOld = rightEncoder;
@@ -90,7 +89,7 @@ void updateEncoderStatus() {
 	encoderCountX =  (double)(leftEncoderCount+rightEncoderCount)/2;
 	encoderCountW = rightEncoderCount - leftEncoderCount;
 
-	// Distances are in Movement File, not yet created
+	// Distances are in Movement File
 	distanceLeftX -= encoderChange;
 	distanceLeftW -= rightEncoderChange - leftEncoderChange; // distanceLeftW: CW is positive
 }

@@ -17,6 +17,9 @@ int current_x;
 int current_y;
 int change_x;
 int change_y;
+extern bool pid;
+extern bool useSensors;
+extern bool sensors;
 
 void floodfill_algorithm(void)
 {
@@ -180,7 +183,7 @@ void floodfill_algorithm(void)
 */
 	while (current_x != goal_x || current_y != goal_y)
 	{
-		printf("%d, %d\n", current_x, current_y);
+		//printf("%d, %d\n", current_x, current_y);
 		if ((orientation % 4) < 0)
 		{
 			orientation = (orientation % 4) + 4;
@@ -255,13 +258,17 @@ void floodfill_algorithm(void)
 				ALL_LED_ON;
 				delay_ms(40);
 				resetPID();
+				pid = false;
+				useSensors = false;
+				sensors = false;
 				delay_ms(500000);
+				
 			}
 		}
 		change_x = current_x - c.x;
 		change_y = current_y - c.y;
 
-		printf("..%d, %d\n", c.x, c.y);
+		//printf("..%d, %d\n", c.x, c.y);
 		//		printf("o: %d", orientation);
 
 		// Check orientation to make mouse point in correct direction
@@ -272,15 +279,15 @@ void floodfill_algorithm(void)
 				// printf("1: %d\n", orientation);
 				targetSpeedX = 0;
 				useSensors = false;
-				delay_ms(300);
+				delay_ms(200);
 				// turnRightPID();
 				if (orientation == 0)
 				{
-					turnRightPID();
+					turnRight();
 				}
 				else
 				{
-					turnLeftPID();
+					turnLeft();
 				}
 				if ((orientation % 4) < 0)
 				{
@@ -298,15 +305,15 @@ void floodfill_algorithm(void)
 			{
 				targetSpeedX = 0;
 				useSensors = false;
-				delay_ms(300);
+				delay_ms(200);
 				// turnLeftPID();
 				if (orientation == 0)
 				{
-					turnLeftPID();
+					turnLeft();
 				}
 				else
 				{
-					turnRightPID();
+					turnRight();
 				}
 
 				// printf("2: %d\n", orientation);
@@ -326,16 +333,16 @@ void floodfill_algorithm(void)
 			{
 				targetSpeedX = 0;
 				useSensors = false;
-				delay_ms(300);
+				delay_ms(200);
 
 				// turnLeftPID();
 				if (orientation == 3)
 				{
-					turnLeftPID();
+					turnLeft();
 				}
 				else
 				{
-					turnRightPID();
+					turnRight();
 				}
 				// printf("3: %d\n", orientation);
 				if ((orientation % 4) < 0)
@@ -354,15 +361,15 @@ void floodfill_algorithm(void)
 			{
 				targetSpeedX = 0;
 				useSensors = false;
-				delay_ms(300);
+				delay_ms(200);
 				// turnLeftPID();
 				if (orientation == 1)
 				{
-					turnLeftPID();
+					turnLeft();
 				}
 				else
 				{
-					turnRightPID();
+					turnRight();
 				}
 				// printf("4: %d\n", orientation);
 				if ((orientation % 4) < 0)

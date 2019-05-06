@@ -61,12 +61,12 @@ int leftAdjust;
 int rightAdjust;
 void adjuster(void)
 {
-	leftAdjust = 0.15 * (targetFrontLeft- LFSensor);
-	rightAdjust = 0.15 * (targetFrontRight - RFSensor);
-	if (leftAdjust > 300) 
-		leftAdjust = 200;
-	if (rightAdjust > 300)
-		rightAdjust = 200;
+	leftAdjust = 0.25 * (targetFrontLeft- LFSensor);
+	rightAdjust = 0.25 * (targetFrontRight - RFSensor);
+	if (leftAdjust > 150) 
+		leftAdjust = 150;
+	if (rightAdjust > 150)
+		rightAdjust = 150;
 	setLeftPwm(leftAdjust);//set left motor speed
 	setRightPwm(rightAdjust);//set right motor speed
 	delay_ms(1);
@@ -117,12 +117,15 @@ int main(void) {
 	targetSpeedX = 0;
 	targetSpeedW = 0;
 	
-//	pid = false;
-//	sensors = false;
-//	useSensors = false;
+	/*pid = false;
+	sensors = false;
+	useSensors = false;*/
 	
 	while(1) {
-		shortBeep(100, 900);
+		//shortBeep(100, 900);
+		/*pid = false;
+		adjuster();*/
+		//delay_ms(2000);
 		if (rightHand) {
 			LED2_ON;
 			navigate();
@@ -133,11 +136,13 @@ int main(void) {
 		}
 		
 		//readSensor();
+		//delay_ms(5000);
 //		
 		//printf("LF %d RF %d DL %d DR %d\n", LFSensor, RFSensor, DLSensor, DRSensor);
 		//printf("leftWall: %d rightWall: %d\n", leftWall, rightWall);
 		//printf("distanceLeftW: %f\n", distanceLeftW);
 		//printf("aSpeed %d angle %d \r\n", aSpeed, angle);
 		//printf("lenc %d renc %d\n", getLeftEncCount(), getRightEncCount()); 
+		//delay_ms(1000);
 	}
 }

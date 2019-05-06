@@ -5,9 +5,9 @@
 #include "stdbool.h"
 
 
-double accX = 3;
+double accX = .5;
 double accW = 3;
-double decX = 120;
+double decX = 2.5;//120
 double decW = 3;
 
 double sensorFeedback = 0;

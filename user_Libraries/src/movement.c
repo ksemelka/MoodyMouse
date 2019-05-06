@@ -22,8 +22,8 @@ int T1 = 25;
 int T2 = 65;
 int T3 = 25;
 
-int moveSpeed = 80;
-int turnSpeed = 15;
+int moveSpeed = 85; // 80
+int turnSpeed = 50;
 int returnSpeed = 10;
 int stopSpeed = 30;
 int maxSpeed = 600; //>600
@@ -32,10 +32,10 @@ double distanceLeftX;
 double distanceLeftW;
 
 // 43.888 ticks per mm
-int oneCellDistance = 15800;
-int startCellDistance = 3100;
-int leftTurnDistance = 10100;
-int rightTurnDistance = 10025;
+int oneCellDistance = 15700;
+int startCellDistance = 4700;
+int leftTurnDistance = 10040;
+int rightTurnDistance = 10045;
 
 extern double targetSpeedX;
 extern double targetSpeedW;
@@ -60,7 +60,7 @@ u32 curt;
 extern bool pid;
 
 void moveOneCell() {
-	useSensors = true;
+	shortBeep(25, 2100);
 	targetSpeedW = 0;
 	targetSpeedX = moveSpeed;
 	distanceLeftX = oneCellDistance + startCellDistance;
@@ -75,23 +75,36 @@ void moveOneCell() {
 		//x = needToDecelerate(distanceLeftX, curSpeedX, 0);
 		//printf("%f\n", x);
 		
-		if (distanceLeftX > 5000 && distanceLeftX < 5700) {
-//			shortBeep(25, 2100);
+		if (distanceLeftX > 500) {
+			useSensors = true;
+		}
+		
+		if (distanceLeftX > 8000 && distanceLeftX < 8700) {
 			LED4_OFF;
 			LED3_ON;
 			updateState();
 		}
 		
+		if (distanceLeftX <= 0) {
+			break;
+		}
+		
 		//there is something else you can add here. Such as detecting falling edge of post to correct longitudinal position of mouse when running in a straight path
 	}
-	while( (( encoderCountX-oldEncoderCount < oneCellDistance + startCellDistance) && LFSensor < targetFront2 && RFSensor < targetFront2)	// If no wall in front, use encoders
-		|| (LFSensor < targetFrontLeft && LFSensor > targetFront2)
-	  || (RFSensor < targetFrontRight && RFSensor > targetFront2) // If has front wall, use sensors
+	while( (( encoderCountX-oldEncoderCount < oneCellDistance + startCellDistance) && LFSensor < targetFront2 - 5 && RFSensor < targetFront2)	// If no wall in front, use encoders
+		|| (LFSensor < targetFrontLeft && LFSensor > targetFront2 - 5)
+	  || (RFSensor < targetFrontRight && RFSensor > targetFront2 - 5) // If has front wall, use sensors
 		 );
+	useSensors = true;
 	//LED3_OFF;
 	
-	shortBeep(25, 1500);
+	//shortBeep(25, 1500);
 	LED3_OFF;
+	//targetSpeedX = 0;
+	
+	if (distanceLeftX > 500) {
+			updateState();
+	}
 	
 	startCellDistance = 0;
 	//LFvalues1 and RFvalues1 are the front wall sensor threshold when the center of mouse between the boundary of the cells.
@@ -99,14 +112,15 @@ void moveOneCell() {
 	//and LF/RFvalues2 are usually the threshold to determine if there is a front wall or not. You should probably move this 10mm closer to front wall when collecting
 	//these thresholds just in case the readings are too weak.
 	
-	if (nextCellState == FRONT || nextCellState == FRONT + LEFT || nextCellState == FRONT + RIGHT || nextCellState == FRONT + LEFT + RIGHT) {
-		while(LFSensor < targetFrontLeft || RFSensor < targetFrontRight) {
+	if (frontWall) {
+		//nextCellState == FRONT || nextCellState == FRONT + LEFT || nextCellState == FRONT + RIGHT || nextCellState == FRONT + LEFT + RIGHT) {
+		/*while(LFSensor < targetFrontLeft && RFSensor < targetFrontRight) {
 			targetSpeedX = moveSpeed;
-		}
+		}*/
 		targetSpeedX = 0;
 		pid = false;
 		curt = millis();
-		while ((millis() - curt) < 300) {
+		while ((millis() - curt) < 500) {
 			adjuster();
 		}
 		targetSpeedX = 0;
@@ -116,30 +130,46 @@ void moveOneCell() {
 	oldEncoderCount = encoderCountX; //update here for next movement to minimized the counts loss between cells.
 }
 
+extern double curSpeedW;
+extern double decW;
+
 void turnLeft() {
+	orientation--;
+	if (orientation < 0) {
+		orientation = 3;
+	}
 	targetSpeedX = 0;
 	useSensors = false;
 	distanceLeftW = leftTurnDistance;
-	targetSpeedW = 15;
 	while (distanceLeftW > 0) {
-		delay_ms(1);
+		if(needToDecelerate(distanceLeftW, curSpeedW, turnSpeed) < decW)
+			targetSpeedW = turnSpeed;
+		else
+			targetSpeedW = 0;
 	}
 	targetSpeedW = 0;
-	delay_ms(200);
+	delay_ms(300);
 	resetPID();
 }
 
 void turnRight() {
+	orientation++;
+	if (orientation > 3) {
+		orientation = 0;
+	}
+	
 	targetSpeedX = 0;
 	useSensors = false;
 	distanceLeftW = -rightTurnDistance;
 	targetSpeedW = -turnSpeed;
 	while (distanceLeftW < 0) {
-		delay_ms(1);
-		//printf("%f\n", distanceLeftW);
+		if(needToDecelerate(-distanceLeftW, -curSpeedW, turnSpeed) < decW)
+			targetSpeedW = -turnSpeed;
+		else
+			targetSpeedW = 0;
 	}
 	targetSpeedW = 0;
-	delay_ms(200);
+	delay_ms(300);
 	resetPID();
 }
 
@@ -165,6 +195,18 @@ void turnLeftPID() {
 	targetSpeedW = 0;
 	elapseMillis(350, curt);
 	resetPID();
+	
+	if (frontWall) {
+		targetSpeedX = 0;
+		pid = false;
+		curt = millis();
+		while ((millis() - curt) < 800) {
+			adjuster();
+		}
+		targetSpeedX = 0;
+		pid = true;
+		resetPID();
+	}
 }
 
 void turnRightPID() {
@@ -189,9 +231,30 @@ void turnRightPID() {
 	targetSpeedW = 0;
 	elapseMillis(350, curt);
 	resetPID();
+	
+	if (frontWall) {
+		targetSpeedX = 0;
+		pid = false;
+		curt = millis();
+		while ((millis() - curt) < 800) {
+			adjuster();
+		}
+		targetSpeedX = 0;
+		pid = true;
+		resetPID();
+	}
 }
 
 void turnAround() {
+	if (frontWall) {
+		if (rightWall) {
+			turnAroundRight();
+		}
+		else {
+			turnAroundLeft();
+		}
+	}
+	/*
 	switch(nextCellState) {
 	case FRONT:
 		turnLeftPID();
@@ -215,37 +278,37 @@ void turnAround() {
 	case FRONT + RIGHT + LEFT:
 		turnAroundLeft();
 		break;
-	}
+	}*/
 }
 
 void turnAroundLeft() {
-	turnLeftPID();
+	turnLeft();
 	
 	// Adjust position in cell using left wall
 	pid = false;
 	curt = millis();
-	while ((millis() - curt) < 600) {
+	while ((millis() - curt) < 500) {
 		adjuster();
 	}
 	pid = true;
 	resetPID();
 	
-	turnLeftPID();
+	turnLeft();
 }
 
 void turnAroundRight() {
-	turnRightPID();
+	turnRight();
 	
 	// Adjust position in cell using right wall
 	pid = false;
 	curt = millis();
-	while ((millis() - curt) < 600) {
+	while ((millis() - curt) < 500) {
 		adjuster();
 	}
 	pid = true;
 	resetPID();
 	
-	turnRightPID();
+	turnRight();
 }
 
 void turnLeftCurve() {

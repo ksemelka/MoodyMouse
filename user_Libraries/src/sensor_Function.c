@@ -28,16 +28,16 @@ bool frontWall;
 bool leftWall;
 bool rightWall;
 
-int thresholdFrontLeft = 25;
-int thresholdFrontRight = 65;
-int thresholdSide = 500;		// Threshold for Wall on side
-int thresholdUpperFront = 2300; // Threshold for when mouse close to front wall detecting side walls
+int thresholdFrontLeft = 180; //200
+int thresholdFrontRight = 230; //250
+int thresholdSide = 600;	//500	// Threshold for Wall on side
+int thresholdUpperFront = 1000; //2200 // Threshold for when mouse close to front wall detecting side walls
 
 int targetLeft = 0;
 int targetRight = 0;
-int targetFrontLeft = 1700;	// Threshold for Wall in front from Cell Boundary
-int targetFrontRight = 2200;
-int targetFront2 = 300;	// Threshold for Wall in front from Half Cell further than boundary
+int targetFrontLeft = 2000;	// 1700 // Threshold for Wall in front from Cell Boundary (Center of Cell)
+int targetFrontRight = 2450;	// 2200 
+int targetFront2 = 85;	//300 // Threshold for Wall in front from Half Cell further than boundary (Half cell behind - on border of cell)
 
 /*read IR sensors*/
 void readSensor(void)
