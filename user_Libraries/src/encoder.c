@@ -46,8 +46,10 @@ void Encoder_Configration(void)
     TIM_SetAutoreload (TIM5, 0xffffffff);//0xffffffff is the max value for 32 bit, the autoreload value will be 0xffff for 16 bit timer
 	TIM_SetAutoreload (TIM2, 0xffffffff);
 	/* Configure the encoder */
-	TIM_EncoderInterfaceConfig(TIM5, TIM_EncoderMode_TI12, TIM_ICPolarity_Rising, TIM_ICPolarity_Falling);//rising rising or rising falling will help you to swithc the direction for encoder at quardrature mode
-	TIM_EncoderInterfaceConfig(TIM2, TIM_EncoderMode_TI12, TIM_ICPolarity_Rising, TIM_ICPolarity_Rising);//if the setting is rising rising and the encoder counts decreases when wheel spin forward, just change it to rising falling
+	//TIM_EncoderInterfaceConfig(TIM5, TIM_EncoderMode_TI12, TIM_ICPolarity_Rising, TIM_ICPolarity_Falling);//rising rising or rising falling will help you to swithc the direction for encoder at quardrature mode
+	TIM_EncoderInterfaceConfig(TIM5, TIM_EncoderMode_TI12, TIM_ICPolarity_Rising, TIM_ICPolarity_Rising);
+	//TIM_EncoderInterfaceConfig(TIM2, TIM_EncoderMode_TI12, TIM_ICPolarity_Rising, TIM_ICPolarity_Rising);//if the setting is rising rising and the encoder counts decreases when wheel spin forward, just change it to rising falling
+	TIM_EncoderInterfaceConfig(TIM2, TIM_EncoderMode_TI12, TIM_ICPolarity_Rising, TIM_ICPolarity_Falling);
 	/* TIM4 counter enable */
 	TIM_Cmd(TIM5, ENABLE);	
 	TIM_Cmd(TIM2, ENABLE);	

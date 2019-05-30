@@ -9,10 +9,15 @@ void TIM4_PWM_Init(void);
 void setLeftPwm(int32_t speed);
 void setRightPwm(int32_t speed);
 
-#define L_PWM_F TIM4->CCR1
-#define L_PWM_R TIM4->CCR2
-#define R_PWM_F TIM4->CCR4
-#define R_PWM_R TIM4->CCR3
+#define L_PWM_F TIM4->CCR2
+#define L_PWM_R TIM4->CCR1
+#define R_PWM_F TIM4->CCR3
+#define R_PWM_R TIM4->CCR4
+
+//#define L_PWM_F TIM4->CCR1
+//#define L_PWM_R TIM4->CCR2
+//#define R_PWM_F TIM4->CCR4
+//#define R_PWM_R TIM4->CCR3
 
 #define turnMotorOff     setLeftPwm(0);setRightPwm(0)
 
