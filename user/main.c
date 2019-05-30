@@ -89,7 +89,14 @@ int main(void) {
 	LED_Fancy_On();
 	ALL_LED_ON;
 	onTone();
-	
+	if (read_Vol_Meter < 2700) {
+		while(1) {
+			displayMatrixScroll("BATT");
+			delay_ms(500);
+			displayMatrixScroll("LOW ");
+			delay_ms(500);
+		}
+	}
 	while (1) {
 		displayMatrixScroll("FUCK");
 		readSensor();
