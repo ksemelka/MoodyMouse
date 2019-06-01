@@ -168,75 +168,75 @@ int fgetc(FILE *f)
   return temp;
 }
 
-int PutChar (int ch)
-{
-//   if (!usart_enabled) {
-//     return EOF;
-//   }
-  while (USART_GetFlagStatus (USART1, USART_FLAG_TXE) == RESET);
-  USART_SendData (USART1, ch);
-  return (ch);
-}
+// int PutChar (int ch)
+// {
+// //   if (!usart_enabled) {
+// //     return EOF;
+// //   }
+//   while (USART_GetFlagStatus (USART1, USART_FLAG_TXE) == RESET);
+//   USART_SendData (USART1, ch);
+//   return (ch);
+// }
 
- int GetChar(void)  
-{
-	//delay_ms(0);
-	printf("\r\npress any key to continue...\r\n\r\n");	
-	while (USART_GetFlagStatus (USART1, USART_FLAG_RXNE) == RESET);
-    //printf("%d\r\n",(USART_ReceiveData (USART1)&0xFF));
-	return ( (int) (USART_ReceiveData (USART1)&0xFF) );
-} 
+//  int GetChar(void)  
+// {
+// 	//delay_ms(0);
+// 	printf("\r\npress any key to continue...\r\n\r\n");	
+// 	while (USART_GetFlagStatus (USART1, USART_FLAG_RXNE) == RESET);
+//     //printf("%d\r\n",(USART_ReceiveData (USART1)&0xFF));
+// 	return ( (int) (USART_ReceiveData (USART1)&0xFF) );
+// } 
 
-char inputChar(void)
-{
-	printf("please enter a charactor...\r\n");
-	while (USART_GetFlagStatus (USART1, USART_FLAG_RXNE) == RESET);
-	printf("%c\r\n", USART_ReceiveData(USART1));
-	return USART_ReceiveData(USART1);
-}
+// char inputChar(void)
+// {
+// 	printf("please enter a charactor...\r\n");
+// 	while (USART_GetFlagStatus (USART1, USART_FLAG_RXNE) == RESET);
+// 	printf("%c\r\n", USART_ReceiveData(USART1));
+// 	return USART_ReceiveData(USART1);
+// }
 
-int inputDigit(void)
-{
-	printf("please enter a digit...\r\n");
-	while (USART_GetFlagStatus (USART1, USART_FLAG_RXNE) == RESET);
-	printf("%d\r\n", ((int)USART_ReceiveData(USART1)-48));
-	return ((int)USART_ReceiveData(USART1)-48);
-}
+// int inputDigit(void)
+// {
+// 	printf("please enter a digit...\r\n");
+// 	while (USART_GetFlagStatus (USART1, USART_FLAG_RXNE) == RESET);
+// 	printf("%d\r\n", ((int)USART_ReceiveData(USART1)-48));
+// 	return ((int)USART_ReceiveData(USART1)-48);
+// }
 
 
 
 //string input test
-void inputString(char target[])
-{
-	char uiTemp[20];
+// void inputString(char target[])
+// {
+// 	char uiTemp[20];
 
-	printf("Press %s to Continue... :",target); 
-	scanf("%s",uiTemp);
-	printf("%s\r\n",uiTemp);
-	while((strcmp(uiTemp, target) != 0))// && (uiTemp != 'C'))
-	{
+// 	printf("Press %s to Continue... :",target); 
+// 	scanf("%s",uiTemp);
+// 	printf("%s\r\n",uiTemp);
+// 	while((strcmp(uiTemp, target) != 0))// && (uiTemp != 'C'))
+// 	{
 		
-		printf("Invalid input, press %s to Continue... :", target); 
-		scanf("%s",uiTemp);
-		printf("%s\r\n",uiTemp);
-	}
-}
+// 		printf("Invalid input, press %s to Continue... :", target); 
+// 		scanf("%s",uiTemp);
+// 		printf("%s\r\n",uiTemp);
+// 	}
+// }
 	
 
 
 
 //digits input test
-void inputDigits(int target)
-{
-    int uiTemp;
-	printf("Press %d to Continue... :", target); 
-	scanf("%d",&uiTemp);
-	printf("%d\r\n",uiTemp);
-	while(uiTemp != target)// && (uiTemp != 'C'))
-	{
+// void inputDigits(int target)
+// {
+//     int uiTemp;
+// 	printf("Press %d to Continue... :", target); 
+// 	scanf("%d",&uiTemp);
+// 	printf("%d\r\n",uiTemp);
+// 	while(uiTemp != target)// && (uiTemp != 'C'))
+// 	{
 		
-		printf("Invalid input, press %d to Continue... :",  target); 
-		scanf("%d",&uiTemp);
-		printf("%d\r\n",uiTemp);
-	}
-}
+// 		printf("Invalid input, press %d to Continue... :",  target); 
+// 		scanf("%d",&uiTemp);
+// 		printf("%d\r\n",uiTemp);
+// 	}
+// }
