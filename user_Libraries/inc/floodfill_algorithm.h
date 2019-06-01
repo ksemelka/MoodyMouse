@@ -13,4 +13,6 @@ extern int change_y;
 
 void floodfill_algorithm(void);
 
+void optimal_path(void);
+
 #endif
