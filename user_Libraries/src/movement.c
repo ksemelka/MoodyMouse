@@ -61,8 +61,8 @@ extern bool pid;
 
 void moveOneCell() {
 	shortBeep(25, 2100);
-	targetSpeedW = 0;
-	targetSpeedX = moveSpeed;
+	//targetSpeedW = 0;
+	//targetSpeedX = moveSpeed;
 	distanceLeftX = oneCellDistance + startCellDistance;
 	LED4_ON;
 	do {
@@ -102,7 +102,7 @@ void moveOneCell() {
 	LED3_OFF;
 	//targetSpeedX = 0;
 	
-	if (distanceLeftX > 500) {
+	if (distanceLeftX > 200) {
 			updateState();
 	}
 	

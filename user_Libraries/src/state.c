@@ -33,18 +33,18 @@ void navigate() {
 	case 0:       // Randomly choose left, right, or straight
 		if (rand() % 3 == 2) {
 			targetSpeedX = 0;
-			while (curSpeedX != 0) {
+			/*while (curSpeedX != 0) {
 				delay_ms(1);
-			}
-			//delay_ms(300);
+			}*/
+			delay_ms(300);
 			turnRight();
 		}
 		else if (rand() % 3 == 1) {
 			targetSpeedX = 0;
-			while (curSpeedX != 0) {
+			/*while (curSpeedX != 0) {
 				delay_ms(1);
-			}
-			//delay_ms(300);
+			}*/
+			delay_ms(300);
 			turnLeft();
 		}
 		moveOneCell();
@@ -61,9 +61,10 @@ void navigate() {
 	case RIGHT:
 		if (rand() % 2) {   // Turn left or go forward randomly
 			targetSpeedX = 0;
-			while (curSpeedX != 0) {
+			/*while (curSpeedX != 0) {
 				delay_ms(1);
-			}
+			}*/
+			delay_ms(300);
 			turnLeft();
 		}
 		moveOneCell();
@@ -71,10 +72,10 @@ void navigate() {
 	case LEFT:
 		if (rand() % 2) {   // Turn right or go forward randomly
 			targetSpeedX = 0;
-			while (curSpeedX != 0) {
+			/*while (curSpeedX != 0) {
 				delay_ms(1);
-			}
-			//delay_ms(300);
+			}*/
+			delay_ms(300);
 			turnRight();
 		}
 			moveOneCell();

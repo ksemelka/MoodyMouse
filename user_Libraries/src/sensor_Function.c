@@ -28,16 +28,17 @@ bool frontWall;
 bool leftWall;
 bool rightWall;
 
-int thresholdFrontLeft = 180; //200
-int thresholdFrontRight = 230; //250
-int thresholdSide = 600;	//500	// Threshold for Wall on side
-int thresholdUpperFront = 1000; //2200 // Threshold for when mouse close to front wall detecting side walls
+int thresholdFrontLeft = 200; //180; //200
+int thresholdFrontRight = 250; //230; //250
+int thresholdSideLeft = 300;	// Threshold for Wall on side
+int thresholdSideRight = 500;
+int thresholdUpperFront = 1200; //1000; //2200 // Threshold for when mouse close to front wall detecting side walls
 
 int targetLeft = 0;
 int targetRight = 0;
-int targetFrontLeft = 2000;	// 1700 // Threshold for Wall in front from Cell Boundary (Center of Cell)
-int targetFrontRight = 2450;	// 2200 
-int targetFront2 = 85;	//300 // Threshold for Wall in front from Half Cell further than boundary (Half cell behind - on border of cell)
+int targetFrontLeft = 2000;	// 2000 // Threshold for Wall in front from Cell Boundary (Center of Cell)
+int targetFrontRight = 2200; 	//2450;	// 2200 
+int targetFront2 = 275;	//300 // Threshold for Wall in front from Half Cell further than boundary (Half cell behind - on border of cell)
 
 /*read IR sensors*/
 void readSensor(void)
@@ -158,10 +159,11 @@ void getSensorError(void) {
 		else if (rightWall == false && leftWall == false) {
 			sensorError = 0;
 		}
-		}
-		else {
-			sensorError = 0;
-		}
+	}
+	else {
+		sensorError = 0;
+	}
+	
 	if (nextCellState == FRONT || nextCellState == 0) {
 		sensorError = 0;
 	}
@@ -171,21 +173,21 @@ void getSensorError(void) {
 }
 
 void detectWalls() {
-	if (RFSensor > thresholdFrontRight || LFSensor > thresholdFrontLeft) {
+	if (RFSensor > thresholdFrontRight && LFSensor > thresholdFrontLeft) {
 		frontWall = true;
 	}
 	else {
 		frontWall = false;
 	}
 
-	if (DLSensor > thresholdSide) {
+	if (DLSensor > thresholdSideLeft) {
 		leftWall = true;
 	}
 	else {
 		leftWall = false;
 	}
 	
-	if (DRSensor > thresholdSide) {
+	if (DRSensor > thresholdSideRight) {
 		rightWall = true;
 	}
 	else {
