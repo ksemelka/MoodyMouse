@@ -83,7 +83,7 @@ int main(void) {
 	buzzer_Configuration();
 	ADC_Config();
 	
-	delay_ms(500); // Start delay
+	delay_ms(250); // Start delay
 	onTone();
 	LED_Fancy_On();
 	LED_Fancy_On();
@@ -137,7 +137,7 @@ int main(void) {
 		adjuster();*/
 		//delay_ms(2000);
 		if (rightHand) {
-			displayMatrixScroll("RAND");
+			//displayMatrixScroll("RAND");
 			LED2_ON;
 			navigate();
 		}

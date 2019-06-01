@@ -5,10 +5,10 @@
 #include "stdbool.h"
 
 
-double accX = .5;
-double accW = 3;
-double decX = 2.5;//120
-double decW = 3;
+double accX = .25;
+double accW = 1.5;
+double decX = 1.25;//120
+double decW = 1.5;
 
 double sensorFeedback = 0;
 double turnFeedback = 0;

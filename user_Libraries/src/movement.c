@@ -23,19 +23,19 @@ int T2 = 65;
 int T3 = 25;
 
 int moveSpeed = 85; // 80
-int turnSpeed = 50;
+int turnSpeed = 37;
 int returnSpeed = 10;
 int stopSpeed = 30;
-int maxSpeed = 600; //>600
+int maxSpeed = 300; //>300
 
 double distanceLeftX;
 double distanceLeftW;
 
 // 43.888 ticks per mm
-int oneCellDistance = 15700;
-int startCellDistance = 4700;
-int leftTurnDistance = 10040;
-int rightTurnDistance = 10045;
+int oneCellDistance = 30250;
+int startCellDistance = 9400;
+int leftTurnDistance = 20700;
+int rightTurnDistance = 20500;
 
 extern double targetSpeedX;
 extern double targetSpeedW;
@@ -79,7 +79,7 @@ void moveOneCell() {
 			useSensors = true;
 		}
 		
-		if (distanceLeftX > 8000 && distanceLeftX < 8700) {
+		if (distanceLeftX > 30000 / 5 && distanceLeftX < (30000 / 5) + 500) {
 			LED4_OFF;
 			LED3_ON;
 			updateState();
