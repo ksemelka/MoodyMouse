@@ -166,6 +166,10 @@ void floodfill_algorithm(void)
 	current_x = start_x;
 	current_y = start_y;
 
+	struct vertex start;
+	start.x = start_x;
+	start.y = start_y;
+	Stack_Push(op, start);
 	// Hardcode first cell
 	// Left
 	/*maze_wallinput(current_x, current_y, (orientation + 3) % 4);
