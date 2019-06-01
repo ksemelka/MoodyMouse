@@ -89,8 +89,16 @@ int main(void) {
 	LED_Fancy_On();
 	ALL_LED_ON;
 	onTone();
-	
+	if (read_Vol_Meter < 2700) {
+		while(1) {
+			displayMatrixScroll("BATT");
+			delay_ms(500);
+			displayMatrixScroll("LOW ");
+			delay_ms(500);
+		}
+	}
 	while (1) {
+		displayMatrixScroll("FUCK");
 		readSensor();
     if (RFSensor > 2000) {
 			rightHand = true;
@@ -100,7 +108,9 @@ int main(void) {
 			rightHand = false;
 			break;
 		}
-    delay_ms(50);
+    delay_ms(500);
+		displayMatrixScroll("KYLE");
+		delay_ms(500);
   }
 	ALL_LED_OFF;
 	startTone();
@@ -127,10 +137,12 @@ int main(void) {
 		adjuster();*/
 		//delay_ms(2000);
 		if (rightHand) {
+			displayMatrixScroll("RAND");
 			LED2_ON;
 			navigate();
 		}
 		else {
+			displayMatrixScroll("FLOD");
 			LED1_ON;
 			floodfill_algorithm();
 		}
