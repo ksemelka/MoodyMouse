@@ -268,11 +268,11 @@ void floodfill_algorithm(void)
 				delay_ms(200);
 				ALL_LED_ON;
 				delay_ms(40);
-				resetPID();
-				pid = false;
-				useSensors = false;
-				sensors = false;
-				delay_ms(500000);
+				// resetPID();
+				// pid = false;
+				// useSensors = false;
+				// sensors = false;
+				delay_ms(5000);
 				
 			}
 		}

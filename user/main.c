@@ -113,17 +113,20 @@ int main(void) {
 			break;
 		}
     	delay_ms(50);
-		if ((int)getRightEncCount > 0 && (int)getRightEncCount < 500) {
+		if (rightEncoderCount > 50 && rightEncoderCount < 5000) {
 			selector = 1; //Floodfill
 			displayMatrixScroll("FLOD");
 		}
-		else if ((int)getRightEncCount >= 500 && (int)getRightEncCount < 1000) {
+		else if (rightEncoderCount >= 5000 && rightEncoderCount < 10000) {
 			selector = 2; //Fastest path
 			displayMatrixScroll("FAST");
 		}
-		else if ((int)getRightEncCount >= 1000 && (int)getRightEncCount < 1500) {
+		else if (rightEncoderCount >= 10000 && rightEncoderCount < 15000) {
 			selector = 3; //Fastest path
 			displayMatrixScroll("RAND");
+		}
+		else {
+			displayMatrixScroll("SLCT");
 		}
 		// displayMatrixScroll("KYLE");
 		// delay_ms(500);
