@@ -12,6 +12,9 @@ struct Stack stack;
 Stack* s = &stack;
 struct vertex c;
 
+//--- Optimal Path Stack ------ //
+struct Stack optimal;
+Stack* op = &optimal;
 
 void Stack_Init(Stack *S)
 {

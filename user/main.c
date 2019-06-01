@@ -17,6 +17,7 @@
 #include "state.h"
 #include "pid.h"
 #include "floodfill.h"
+#include "floodfill_algorithm.h"
 
 extern void PID(void);
 extern void updateCurrentSpeed(void);
@@ -89,6 +90,9 @@ int main(void) {
 	LED_Fancy_On();
 	ALL_LED_ON;
 	onTone();
+
+	int selector = 0;
+	MAIN_MENU:
 	if (read_Vol_Meter < 2700) {
 		while(1) {
 			displayMatrixScroll("BATT");
@@ -98,19 +102,31 @@ int main(void) {
 		}
 	}
 	while (1) {
-		displayMatrixScroll("FUCK");
+		// displayMatrixScroll("FUCK");
 		readSensor();
-    if (RFSensor > 2000) {
+    	if (RFSensor > 2000) {
 			rightHand = true;
-      break;
+      		break;
 		}
 		else if (LFSensor > 2000) {
 			rightHand = false;
 			break;
 		}
-    delay_ms(500);
-		displayMatrixScroll("KYLE");
-		delay_ms(500);
+    	delay_ms(50);
+		if ((int)getRightEncCount > 0 && (int)getRightEncCount < 500) {
+			selector = 1; //Floodfill
+			displayMatrixScroll("FLOD");
+		}
+		else if ((int)getRightEncCount >= 500 && (int)getRightEncCount < 1000) {
+			selector = 2; //Fastest path
+			displayMatrixScroll("FAST");
+		}
+		else if ((int)getRightEncCount >= 1000 && (int)getRightEncCount < 1500) {
+			selector = 3; //Fastest path
+			displayMatrixScroll("RAND");
+		}
+		// displayMatrixScroll("KYLE");
+		// delay_ms(500);
   }
 	ALL_LED_OFF;
 	startTone();
@@ -136,15 +152,24 @@ int main(void) {
 		/*pid = false;
 		adjuster();*/
 		//delay_ms(2000);
-		if (rightHand) {
-			//displayMatrixScroll("RAND");
+		if (selector == 3) {
+			displayMatrixScroll("RAND");
 			LED2_ON;
 			navigate();
 		}
-		else {
+		else if (selector == 1) {
 			displayMatrixScroll("FLOD");
 			LED1_ON;
 			floodfill_algorithm();
+			displayMatrixScroll("RTRN");
+			return_to_start();
+			goto MAIN_MENU;
+		}
+		else if (selector == 2) {
+			displayMatrixScroll("FAST");
+			LED1_ON;
+			optimal_path();
+			goto MAIN_MENU;
 		}
 		
 		//readSensor();

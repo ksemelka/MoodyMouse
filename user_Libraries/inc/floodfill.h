@@ -28,9 +28,19 @@ extern struct Stack stack;
 extern Stack* s;
 extern struct vertex c;
 
+// Used for optimal path
+extern struct Stack optimal;
+extern Stack* op;
+
 // void print_maze();
 
 void Stack_Init(Stack *);
+
+struct vertex Stack_Top(Stack *S);
+
+void Stack_Push(Stack *S, struct vertex d);
+
+void Stack_Pop(Stack *S);
 
 void init_adjacency(void);
 
