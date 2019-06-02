@@ -26,7 +26,7 @@ int moveSpeed = 85; // 80
 int turnSpeed = 37;
 int returnSpeed = 10;
 int stopSpeed = 30;
-int maxSpeed = 300; //>300
+int maxSpeed = 300; //>300// 1200?
 
 double distanceLeftX;
 double distanceLeftW;
@@ -61,74 +61,144 @@ extern bool pid;
 
 void moveOneCell() {
 	shortBeep(25, 2100);
-	//targetSpeedW = 0;
-	//targetSpeedX = moveSpeed;
+	bool stateUpdated = false;
 	distanceLeftX = oneCellDistance + startCellDistance;
-	LED4_ON;
 	do {
-		/*you can call int needToDecelerate(int32_t dist, int16_t curSpd, int16_t endSpd)
-		here with current speed and distanceLeft to decide if you should start to decelerate or not.*/
-		if(needToDecelerate(distanceLeftX, curSpeedX, moveSpeed) < decX)
+		if (needToDecelerate(distanceLeftX, curSpeedX, moveSpeed) < decX) {
 			targetSpeedX = moveSpeed;
-		else
+		}
+		else {
 			targetSpeedX = 0;
-		//x = needToDecelerate(distanceLeftX, curSpeedX, 0);
-		//printf("%f\n", x);
-		
-		if (distanceLeftX > 500) {
-			useSensors = true;
 		}
-		
-		if (distanceLeftX > 30000 / 5 && distanceLeftX < (30000 / 5) + 500) {
-			LED4_OFF;
-			LED3_ON;
+
+		/*
+		// DETECT FALLING EDGE OF POSTS
+		if ((curState & LEFT) && !stateUpdated) {
+			// Detect falling edge of left post and update 
+			if (!leftWall) {
+				distanceLeftX = fallingDistance;
+			}
+		}
+		if ((curState & RIGHT) && !stateUpdated) {
+			// Detect falling edge of right post and update distanceLeftX
+			if (!rightWall) {
+				distanceLeftX = fallingDistance;
+			}
+		}
+		*/
+
+		/*
+		// DETECT RISING EDGE OF POSTS
+		if (!(curState & LEFT) && !stateUpdated) {
+			// Detect falling edge of left post and update 
+			if (!leftWall) {
+				distanceLeftX = risingDistance;
+			}
+		}
+		if (!(curState & RIGHT) && !stateUpdated) {
+			// Detect falling edge of right post and update distanceLeftX
+			if (rightWall) {
+				distanceLeftX = risingDistance;
+			}
+		}
+		*/
+
+		// If mouse is 1/3 the way through the cell, update state for next cell.
+		if (distanceLeftX < 2 * oneCellDistance / 3) {
 			updateState();
+			stateUpdated = true;
 		}
-		
-		if (distanceLeftX <= 0) {
-			break;
-		}
-		
-		//there is something else you can add here. Such as detecting falling edge of post to correct longitudinal position of mouse when running in a straight path
 	}
-	while( (( encoderCountX-oldEncoderCount < oneCellDistance + startCellDistance) && LFSensor < targetFront2 - 5 && RFSensor < targetFront2)	// If no wall in front, use encoders
-		|| (LFSensor < targetFrontLeft && LFSensor > targetFront2 - 5)
-	  || (RFSensor < targetFrontRight && RFSensor > targetFront2 - 5) // If has front wall, use sensors
-		 );
-	useSensors = true;
-	//LED3_OFF;
-	
-	//shortBeep(25, 1500);
-	LED3_OFF;
-	//targetSpeedX = 0;
-	
-	if (distanceLeftX > 200) {
-			updateState();
+	while(
+		((encoderCountX - oldEncoderCount < oneCellDistance + startCellDistance) // encoder count hasn't passed oneCellDistance yet AND there is no wall in front
+		&& LFSensor < targetFront2 && RFSensor < targetFront2) // There is no wall in front
+		|| (LFSensor < targetFrontLeft && LFSensor > targetFront2) // There is a wall in front but mouse isn't at center of cell yet
+		|| (RFSensor < targetFrontRight && RFSensor > targetFront2) // There is a wall in front but mouse isn't at center of cell yet
+	);
+
+	if (!stateUpdated) {
+		// If this branch is entered, something went wrong. ABORTTT
+		LED1_ON;
+		shortBeep(25, 1500);
+		delay_ms(500);
+		shortBeep(25, 1500);
+		delay_ms(500000);
 	}
-	
-	startCellDistance = 0;
-	//LFvalues1 and RFvalues1 are the front wall sensor threshold when the center of mouse between the boundary of the cells.
-	//LFvalues2 and RFvalues2 are the front wall sensor threshold when the center of the mouse staying half cell farther than LFvalues1 and 2
-	//and LF/RFvalues2 are usually the threshold to determine if there is a front wall or not. You should probably move this 10mm closer to front wall when collecting
-	//these thresholds just in case the readings are too weak.
-	
-	if (frontWall) {
-		//nextCellState == FRONT || nextCellState == FRONT + LEFT || nextCellState == FRONT + RIGHT || nextCellState == FRONT + LEFT + RIGHT) {
-		/*while(LFSensor < targetFrontLeft && RFSensor < targetFrontRight) {
-			targetSpeedX = moveSpeed;
-		}*/
-		targetSpeedX = 0;
-		pid = false;
-		curt = millis();
-		while ((millis() - curt) < 500) {
-			adjuster();
-		}
-		targetSpeedX = 0;
-		pid = true;
-		resetPID();
-	}
-	oldEncoderCount = encoderCountX; //update here for next movement to minimized the counts loss between cells.
+
+	oldEncoderCount = encoderCountX;
+	// Fuck Jerry
 }
+
+//void moveOneCell() {
+//	shortBeep(25, 2100);
+//	//targetSpeedW = 0;
+//	//targetSpeedX = moveSpeed;
+//	distanceLeftX = oneCellDistance + startCellDistance;
+//	LED4_ON;
+//	do {
+//		/*you can call int needToDecelerate(int32_t dist, int16_t curSpd, int16_t endSpd)
+//		here with current speed and distanceLeft to decide if you should start to decelerate or not.*/
+//		if(needToDecelerate(distanceLeftX, curSpeedX, moveSpeed) < decX)
+//			targetSpeedX = moveSpeed;
+//		else
+//			targetSpeedX = 0;
+//		//x = needToDecelerate(distanceLeftX, curSpeedX, 0);
+//		//printf("%f\n", x);
+//		
+//		if (distanceLeftX > 500) {
+//			useSensors = true;
+//		}
+//		
+//		if (distanceLeftX > 30000 / 5 && distanceLeftX < (30000 / 5) + 500) {
+//			LED4_OFF;
+//			LED3_ON;
+//			updateState();
+//		}
+//		
+//		if (distanceLeftX <= 0) {
+//			break;
+//		}
+//		
+//		//there is something else you can add here. Such as detecting falling edge of post to correct longitudinal position of mouse when running in a straight path
+//	}
+//	while( (( encoderCountX-oldEncoderCount < oneCellDistance + startCellDistance) && LFSensor < targetFront2 - 5 && RFSensor < targetFront2)	// If no wall in front, use encoders
+//		|| (LFSensor < targetFrontLeft && LFSensor > targetFront2 - 5)
+//	  || (RFSensor < targetFrontRight && RFSensor > targetFront2 - 5) // If has front wall, use sensors
+//		 );
+//	useSensors = true;
+//	//LED3_OFF;
+//	
+//	//shortBeep(25, 1500);
+//	LED3_OFF;
+//	//targetSpeedX = 0;
+//	
+//	if (distanceLeftX > 200) {
+//			updateState();
+//	}
+//	
+//	startCellDistance = 0;
+//	//LFvalues1 and RFvalues1 are the front wall sensor threshold when the center of mouse between the boundary of the cells.
+//	//LFvalues2 and RFvalues2 are the front wall sensor threshold when the center of the mouse staying half cell farther than LFvalues1 and 2
+//	//and LF/RFvalues2 are usually the threshold to determine if there is a front wall or not. You should probably move this 10mm closer to front wall when collecting
+//	//these thresholds just in case the readings are too weak.
+//	
+//	if (frontWall) {
+//		//nextCellState == FRONT || nextCellState == FRONT + LEFT || nextCellState == FRONT + RIGHT || nextCellState == FRONT + LEFT + RIGHT) {
+//		/*while(LFSensor < targetFrontLeft && RFSensor < targetFrontRight) {
+//			targetSpeedX = moveSpeed;
+//		}*/
+//		targetSpeedX = 0;
+//		pid = false;
+//		curt = millis();
+//		while ((millis() - curt) < 500) {
+//			adjuster();
+//		}
+//		targetSpeedX = 0;
+//		pid = true;
+//		resetPID();
+//	}
+//	oldEncoderCount = encoderCountX; //update here for next movement to minimized the counts loss between cells.
+//}
 
 extern double curSpeedW;
 extern double decW;

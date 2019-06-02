@@ -155,6 +155,8 @@ int main(void) {
 		/*pid = false;
 		adjuster();*/
 		//delay_ms(2000);
+		
+		//turnRight();
 		if (selector == 3) {
 			displayMatrixScroll("RAND");
 			LED2_ON;
@@ -176,7 +178,7 @@ int main(void) {
 		}
 		
 		//readSensor();
-		//delay_ms(5000);
+		//delay_ms(200);
 //		
 		//printf("LF %d RF %d DL %d DR %d\n", LFSensor, RFSensor, DLSensor, DRSensor);
 		//printf("leftWall: %d rightWall: %d\n", leftWall, rightWall);
