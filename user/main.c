@@ -145,20 +145,16 @@ int main(void) {
 	resetPID();
 	targetSpeedX = 0;
 	targetSpeedW = 0;
+	clearScreen();
 	
 	/*pid = false;
 	sensors = false;
 	useSensors = false;*/
 	
 	while(1) {
-		//shortBeep(100, 900);
-		/*pid = false;
-		adjuster();*/
-		//delay_ms(2000);
 		
-		//turnRight();
 		if (selector == 3) {
-			displayMatrixScroll("RAND");
+			//displayMatrixScroll("RAND");
 			LED2_ON;
 			navigate();
 		}

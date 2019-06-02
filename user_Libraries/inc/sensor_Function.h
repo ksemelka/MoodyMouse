@@ -26,7 +26,8 @@ extern int targetLeft;
 extern int targetRight;
 extern int targetFrontLeft;
 extern int targetFrontRight;
-extern int targetFront2;
+extern int targetFrontLeft2;
+extern int targetFrontRight2;
 
 extern int thresholdFrontLeft;
 extern int thresholdFrontRight;

@@ -34,8 +34,8 @@ double distanceLeftW;
 // 43.888 ticks per mm
 int oneCellDistance = 30250;
 int startCellDistance = 9400;
-int leftTurnDistance = 20700;
-int rightTurnDistance = 20500;
+int leftTurnDistance = 20200;
+int rightTurnDistance = 20300;
 
 extern double targetSpeedX;
 extern double targetSpeedW;
@@ -61,6 +61,7 @@ extern bool pid;
 
 void moveOneCell() {
 	shortBeep(25, 2100);
+	LED4_ON;
 	bool stateUpdated = false;
 	distanceLeftX = oneCellDistance + startCellDistance;
 	do {
@@ -104,27 +105,38 @@ void moveOneCell() {
 		*/
 
 		// If mouse is 1/3 the way through the cell, update state for next cell.
-		if (distanceLeftX < 2 * oneCellDistance / 3) {
+		if ((distanceLeftX < 2 * oneCellDistance / 3) && !stateUpdated) {
+			shortBeep(25, 2400);
+			LED4_OFF;
+			LED3_ON;
 			updateState();
 			stateUpdated = true;
 		}
 	}
-	while(
-		((encoderCountX - oldEncoderCount < oneCellDistance + startCellDistance) // encoder count hasn't passed oneCellDistance yet AND there is no wall in front
-		&& LFSensor < targetFront2 && RFSensor < targetFront2) // There is no wall in front
-		|| (LFSensor < targetFrontLeft && LFSensor > targetFront2) // There is a wall in front but mouse isn't at center of cell yet
-		|| (RFSensor < targetFrontRight && RFSensor > targetFront2) // There is a wall in front but mouse isn't at center of cell yet
+	while( (encoderCountX - oldEncoderCount < oneCellDistance + startCellDistance)
+		&& LFSensor < targetFrontLeft && RFSensor < targetFrontRight
+		//((encoderCountX - oldEncoderCount < oneCellDistance + startCellDistance) // encoder count hasn't passed oneCellDistance yet AND there is no wall in front
+		//&& LFSensor < targetFrontLeft2 && RFSensor < targetFrontRight2) // There is no wall in front
+		//|| (LFSensor < targetFrontLeft && LFSensor >= targetFrontLeft2) // There is a wall in front but mouse isn't at center of cell yet
+		//|| (RFSensor < targetFrontRight && RFSensor >= targetFrontRight2) // There is a wall in front but mouse isn't at center of cell yet
 	);
 
 	if (!stateUpdated) {
 		// If this branch is entered, something went wrong. ABORTTT
 		LED1_ON;
-		shortBeep(25, 1500);
+		shortBeep(250, 1500);
 		delay_ms(500);
-		shortBeep(25, 1500);
+		shortBeep(250, 1500);
+		resetPID();
+		setLeftPwm(0);
+		setRightPwm(0);
+		pid = false;
+		//sensors = false;
+		useSensors = false;
 		delay_ms(500000);
 	}
 
+	startCellDistance = 0;
 	oldEncoderCount = encoderCountX;
 	// Fuck Jerry
 }
@@ -220,6 +232,7 @@ void turnLeft() {
 	targetSpeedW = 0;
 	delay_ms(300);
 	resetPID();
+	useSensors = true;
 }
 
 void turnRight() {
@@ -241,6 +254,7 @@ void turnRight() {
 	targetSpeedW = 0;
 	delay_ms(300);
 	resetPID();
+	useSensors = true;
 }
 
 void turnLeftPID() {
