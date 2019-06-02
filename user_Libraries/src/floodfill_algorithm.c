@@ -29,15 +29,17 @@ void init_floodfill(void)
 {
 	init_adjacency();
 	assign_dist();
-	Stack_Init(s);
+	orientation = 0;
 }
 
 void run_search(void)
 {
+	orientation = 0;
 	current_x = 0;
 	current_y = 15;
 	goal_x = 7;
 	goal_y = 7;
+	Stack_Init(s);
 	floodfill_algorithm();
 }
 
@@ -45,6 +47,7 @@ void return_to_start(void)
 {
 	goal_x = 0;
 	goal_y = 15;
+	Stack_Init(s);
 	floodfill_algorithm();
 }
 
@@ -211,7 +214,7 @@ void floodfill_algorithm(void)
 
 	moveOneCell();
 */
-	while (current_x != goal_x || current_y != goal_y)
+	while (!(current_x == goal_x && current_y == goal_y))
 	{
 		//printf("%d, %d\n", current_x, current_y);
 		if ((orientation % 4) < 0)
@@ -266,11 +269,17 @@ void floodfill_algorithm(void)
 		}
 
 		// Get the next cell(vertex) which we need to traverse to
-		c = floodfill(current_x, current_y);
+		extern int selector;
+		if (selector == 2) {
+			c = speed_floodfill(current_x, current_y);
+		}
+		else {
+			c = floodfill(current_x, current_y);
+		}
 
-		if (current_x == 7 || current_x == 8)
+		/*if (current_x == goal_x)//7 || current_x == 8)
 		{
-			if (current_y == 7 || current_y == 8)
+			if (current_y == goal_y)//7 || current_y == 8)
 			{
 				targetSpeedX = 0;
 				targetSpeedW = 0;
@@ -291,10 +300,10 @@ void floodfill_algorithm(void)
 				// pid = false;
 				// useSensors = false;
 				// sensors = false;
-				delay_ms(5000);
-				
+				delay_ms(1000);
+				return;
 			}
-		}
+		}*/
 
 		// Storing optimal path
 		// Remove if already traversed before
@@ -428,6 +437,26 @@ void floodfill_algorithm(void)
 		current_x = c.x;
 		current_y = c.y;
 	}
-
+	targetSpeedX = 0;
+	targetSpeedW = 0;
+	LED_Fancy_On();
+	shortBeep(2000, 3000);
+	LED_Fancy_On();
+	ALL_LED_ON;
+	delay_ms(200);
+	ALL_LED_OFF;
+	delay_ms(200);
+	ALL_LED_ON;
+	delay_ms(200);
+	ALL_LED_OFF;
+	delay_ms(200);
+	ALL_LED_ON;
+	delay_ms(40);
+	// resetPID();
+	// pid = false;
+	// useSensors = false;
+	// sensors = false;
+	delay_ms(3000);
+				
 	return;
 }

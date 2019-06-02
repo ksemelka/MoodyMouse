@@ -238,3 +238,72 @@ struct vertex floodfill(int x, int y) {
   m[nextCell.x][nextCell.y].visited = true;
   return nextCell;
 } 
+
+struct vertex speed_floodfill(int x, int y) {
+   int i;
+  int x1, y1;
+  int next_x = x;
+  int next_y = y;
+  int next_dist = 100;
+  struct vertex nextCell;
+
+  for(i = 0; i < 4; i++) {
+    // Serial.println("2");
+    x1 = m[x][y].v[i].x; //x,y at vertices of m[x][y]
+    y1 = m[x][y].v[i].y;
+
+    if(x1 != -1 && x1 != SIZ && y1 != -1 && y1 != SIZ) {
+      if(m[x1][y1].dist < next_dist && m[x1][y1].visited == true) {
+        next_dist = m[x1][y1].dist;
+        next_x = x1;
+        next_y = y1;
+      }
+      
+    }
+  }
+  if(next_x == x && next_y == y) {
+    for(i = 0; i < 4; i++) {
+      // Serial.println("3");
+    x1 = m[x][y].v[i].x; //x,y at vertices of m[x][y]
+    y1 = m[x][y].v[i].y;
+
+    if(x1 != -1 && x1 != SIZ && y1 != -1 && y1 != SIZ) {
+      if(m[x1][y1].dist < next_dist) {
+        next_dist = m[x1][y1].dist;
+        next_x = x1;
+        next_y = y1;
+      }
+      
+    }
+  }
+  }
+
+  if(next_x - m[x][y].x == 1) {
+    nextCell = m[x][y].v[1];
+    nextCell.x = next_x;
+    nextCell.y = next_y;
+  }
+  else if(next_x - m[x][y].x == -1) {
+    nextCell = m[x][y].v[3];
+    nextCell.x = next_x;
+    nextCell.y = next_y;
+  }
+  else if(next_y - m[x][y].y == 1) {
+    nextCell = m[x][y].v[2];
+    nextCell.x = next_x;
+    nextCell.y = next_y;
+  }
+  else if(next_y - m[x][y].y == -1){
+    nextCell = m[x][y].v[0];
+    nextCell.x = next_x;
+    nextCell.y = next_y;
+  }
+  
+  while(stack.size != 0) {
+    updateDist();
+    // Serial.println("4");
+  }
+  // m[nextCell.x][nextCell.y].visited = true;
+  return nextCell;
+
+}

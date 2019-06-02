@@ -106,7 +106,7 @@ void moveOneCell() {
 
 		// If mouse is 1/3 the way through the cell, update state for next cell.
 		if ((distanceLeftX < 2 * oneCellDistance / 3) && !stateUpdated) {
-			shortBeep(25, 2400);
+			//shortBeep(25, 2400);
 			LED4_OFF;
 			LED3_ON;
 			updateState();

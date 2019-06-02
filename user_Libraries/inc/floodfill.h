@@ -47,6 +47,7 @@ void init_adjacency(void);
 void assign_dist(void);
 
 struct vertex floodfill(int x,int y);
+struct vertex speed_floodfill(int x, int y);
 
 void updateDist(void);
 

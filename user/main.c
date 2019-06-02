@@ -72,7 +72,7 @@ void adjuster(void)
 	setRightPwm(rightAdjust);//set right motor speed
 	delay_ms(1);
 }
-
+int selector = 0;
 int main(void) {
 	Systick_Configuration();
 	LED_Configuration();
@@ -91,7 +91,7 @@ int main(void) {
 	ALL_LED_ON;
 	onTone();
 
-	int selector = 0;
+	selector = 0;
 	MAIN_MENU:
 	pid = false;
 	sensors = false;
@@ -104,8 +104,13 @@ int main(void) {
 			delay_ms(500);
 		}
 	}
+	int prevEncVal = 0;
 	while (1) {
 		// displayMatrixScroll("FUCK");
+		if (rightEncoderCount - prevEncVal > 200 || rightEncoderCount - prevEncVal < -200) {
+			shortBeep(100, 900);
+			prevEncVal = rightEncoderCount;
+		}
 		readSensor();
     	if (RFSensor > 2000) {
 			rightHand = true;
@@ -124,26 +129,20 @@ int main(void) {
 
     	delay_ms(50);
 
-		if (rightEncoderCount % 15000 > 0 && rightEncoderCount % 1500 < 5000) {
+		if (rightEncoderCount % 20000 > 15000) {
 			selector = 1; //Floodfill
 			displayMatrixScroll("FLOD");
-			shortBeep(40, 600);
-			delay_ms(40);
-			shortBeep(20, 400);
 		}
-		else if (rightEncoderCount % 15000 >= 5000 && rightEncoderCount % 15000 < 10000) {
+		else if (rightEncoderCount % 20000 >= 10000) {
 			selector = 2; //Fastest path
 			displayMatrixScroll("FAST");
-			shortBeep(40, 600);
-			delay_ms(40);
-			shortBeep(20, 400);
 		}
-		else if (rightEncoderCount % 15000 >= 10000 && rightEncoderCount % 15000 < 15000) {
+		else if (rightEncoderCount % 20000 >= 5000) {
 			selector = 3; //Fastest path
 			displayMatrixScroll("RAND");
-			shortBeep(40, 600);
-			delay_ms(40);
-			shortBeep(20, 400);
+		}
+		else {
+			displayMatrixScroll("SLCT");
 		}
 
 		// displayMatrixScroll("KYLE");
@@ -180,14 +179,15 @@ int main(void) {
 			LED1_ON;
 			init_floodfill();
 			run_search();
-			chirp();
+			//chirp();
 			// displayMatrixScroll("RTRN");
-			return_to_start();
+			//return_to_start();
 			goto MAIN_MENU;
 		}
 		else if (selector == 2) {
 			// displayMatrixScroll("FAST");
 			LED1_ON;
+			run_search();
 			goto MAIN_MENU;
 		}
 		
