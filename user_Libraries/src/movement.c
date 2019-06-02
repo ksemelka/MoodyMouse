@@ -22,8 +22,8 @@ int T1 = 25;
 int T2 = 65;
 int T3 = 25;
 
-int moveSpeed = 135;// FAST AND FURIOUS //85 SLOW BUT STEADY;
-int turnSpeed = 37;
+int moveSpeed = 135;// 135 FAST AND FURIOUS //85 SLOW BUT STEADY;
+int turnSpeed = 100;// 100 FAST AND FURIOUS // 37 SLOW BUT STEADY
 int returnSpeed = 10;
 int stopSpeed = 30;
 int maxSpeed = 300; //>300// 1200?
@@ -34,8 +34,8 @@ double distanceLeftW;
 // 43.888 ticks per mm
 int oneCellDistance = 30250;
 int startCellDistance = 0; // Set in main.c
-int leftTurnDistance = 20200;
-int rightTurnDistance = 20300;
+int leftTurnDistance = 17000;
+int rightTurnDistance = 17100;
 
 extern double targetSpeedX;
 extern double targetSpeedW;
