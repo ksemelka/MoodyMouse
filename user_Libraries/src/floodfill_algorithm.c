@@ -33,7 +33,7 @@ void init_floodfill(void)
 	orientation = 0;
 }
 
-void run_search(void)
+/*void run_search(void)
 {
 	orientation = 0;
 	current_x = 0;
@@ -42,7 +42,7 @@ void run_search(void)
 	goal_y = 7;
 	Stack_Init(s);
 	floodfill_algorithm();
-}
+}*/
 
 void run_fast(void)
 {

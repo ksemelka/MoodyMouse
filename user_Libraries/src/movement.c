@@ -12,7 +12,7 @@
 #include <stdbool.h>
 #include "pwm.h"
 #include "buzzer.h"
-#include "floodfill_algorithm.h"
+#include "floodfill2.h"
 #include "led.h"
 
 extern void resetPID(void);
@@ -112,6 +112,11 @@ void moveOneCell() {
 			LED4_OFF;
 			LED3_ON;
 			updateState();
+			extern int selector;
+			if (selector == 1) {
+				update_walls();
+				flood_fill();
+			}
 			stateUpdated = true;
 		}
 	}

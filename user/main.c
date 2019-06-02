@@ -16,8 +16,9 @@
 #include "movement.h"
 #include "state.h"
 #include "pid.h"
-#include "floodfill.h"
-#include "floodfill_algorithm.h"
+#include "floodfill2.h"
+//#include "floodfill.h"
+//#include "floodfill_algorithm.h"
 
 extern void PID(void);
 extern void updateCurrentSpeed(void);
@@ -178,9 +179,13 @@ int main(void) {
 		else if (selector == 1) {
 			// displayMatrixScroll("FLOD");
 			LED1_ON;
-			init_floodfill();
-			init_fastest_path();
+			init_walls();
+			init_costs();
 			run_search();
+			
+			/*init_floodfill();
+			init_fastest_path();
+			run_search();*/
 			//chirp();
 			// displayMatrixScroll("RTRN");
 			//return_to_start();
@@ -191,7 +196,7 @@ int main(void) {
 			LED1_ON;
 			// run_search();
 			// optimal_path();
-			run_fast();
+			//run_fast();
 			goto MAIN_MENU;
 		}
 		
