@@ -106,28 +106,43 @@ int main(void) {
 		readSensor();
     	if (RFSensor > 2000) {
 			rightHand = true;
+			shortBeep(40, 400);
+			delay_ms(40);
+			shortBeep(20, 600);
       		break;
 		}
 		else if (LFSensor > 2000) {
+			shortBeep(40, 400);
+			delay_ms(40);
+			shortBeep(20, 600);
 			rightHand = false;
 			break;
 		}
+
     	delay_ms(50);
-		if (rightEncoderCount > 50 && rightEncoderCount < 5000) {
+
+		if (rightEncoderCount % 15000 > 0 && rightEncoderCount % 1500 < 5000) {
 			selector = 1; //Floodfill
 			displayMatrixScroll("FLOD");
+			shortBeep(40, 600);
+			delay_ms(40);
+			shortBeep(20, 400);
 		}
-		else if (rightEncoderCount >= 5000 && rightEncoderCount < 10000) {
+		else if (rightEncoderCount % 15000 >= 5000 && rightEncoderCount % 15000 < 10000) {
 			selector = 2; //Fastest path
 			displayMatrixScroll("FAST");
+			shortBeep(40, 600);
+			delay_ms(40);
+			shortBeep(20, 400);
 		}
-		else if (rightEncoderCount >= 10000 && rightEncoderCount < 15000) {
+		else if (rightEncoderCount % 15000 >= 10000 && rightEncoderCount % 15000 < 15000) {
 			selector = 3; //Fastest path
 			displayMatrixScroll("RAND");
+			shortBeep(40, 600);
+			delay_ms(40);
+			shortBeep(20, 400);
 		}
-		else {
-			displayMatrixScroll("SLCT");
-		}
+
 		// displayMatrixScroll("KYLE");
 		// delay_ms(500);
   }
@@ -137,9 +152,9 @@ int main(void) {
 	pid = true;
 	sensors = true;
 	readSensor();
-  targetLeft = DLSensor;
-  targetRight = DRSensor;
-  useSensors = true;
+  	targetLeft = DLSensor;
+  	targetRight = DRSensor;
+  	useSensors = true;
 	
 	srand(((DLSensor + DRSensor + RFSensor + LFSensor * 128 - 3) % (171 + LFSensor)) * (5221 + DRSensor % 111));
 	resetPID();
@@ -152,22 +167,22 @@ int main(void) {
 	useSensors = false;*/
 	
 	while(1) {
-		
 		if (selector == 3) {
 			//displayMatrixScroll("RAND");
 			LED2_ON;
 			navigate();
 		}
 		else if (selector == 1) {
-			displayMatrixScroll("FLOD");
+			// displayMatrixScroll("FLOD");
 			LED1_ON;
 			floodfill_algorithm();
-			displayMatrixScroll("RTRN");
+			// displayMatrixScroll("RTRN");
+			chirp();
 			return_to_start();
 			goto MAIN_MENU;
 		}
 		else if (selector == 2) {
-			displayMatrixScroll("FAST");
+			// displayMatrixScroll("FAST");
 			LED1_ON;
 			optimal_path();
 			goto MAIN_MENU;
