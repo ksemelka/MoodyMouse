@@ -65,8 +65,8 @@ void return_to_start(void)
 }
 
 void init_fastest_path(void) {
-    for(int i = 0; i <= SIZ; i++) {
-      for(int j = 0; j <= SIZ; j++) {
+    for(int i = 0; i < SIZ; i++) {
+      for(int j = 0; j < SIZ; j++) {
         f[i][j].x = i;
         f[i][j].y = j;
         if(i == SIZ) {f[i][j].dist = -1;}
