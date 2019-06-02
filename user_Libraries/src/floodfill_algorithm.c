@@ -327,9 +327,10 @@ void floodfill_algorithm(void)
 			while ((orientation % 4) != 1)
 			{
 				// printf("1: %d\n", orientation);
-				targetSpeedX = 0;
-				useSensors = false;
-				delay_ms(400);
+				if (targetSpeedX > 0) {
+					targetSpeedX = 0;
+					delay_ms(300);
+				}
 				// turnRightPID();
 				if (orientation == 0)
 				{
@@ -353,9 +354,10 @@ void floodfill_algorithm(void)
 		{
 			while ((orientation % 4) != 3)
 			{
-				targetSpeedX = 0;
-				useSensors = false;
-				delay_ms(400);
+				if (targetSpeedX > 0) {
+					targetSpeedX = 0;
+					delay_ms(300);
+				}
 				// turnLeftPID();
 				if (orientation == 0)
 				{
@@ -381,9 +383,10 @@ void floodfill_algorithm(void)
 		{
 			while ((orientation % 4) != 2)
 			{
-				targetSpeedX = 0;
-				useSensors = false;
-				delay_ms(400);
+				if (targetSpeedX > 0) {
+					targetSpeedX = 0;
+					delay_ms(300);
+				}
 
 				// turnLeftPID();
 				if (orientation == 3)
@@ -409,9 +412,10 @@ void floodfill_algorithm(void)
 		{
 			while ((orientation % 4) != 0)
 			{
-				targetSpeedX = 0;
-				useSensors = false;
-				delay_ms(400);
+				if (targetSpeedX > 0) {
+					targetSpeedX = 0;
+					delay_ms(300);
+				}
 				// turnLeftPID();
 				if (orientation == 1)
 				{

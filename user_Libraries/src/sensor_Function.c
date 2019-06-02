@@ -28,8 +28,8 @@ bool frontWall;
 bool leftWall;
 bool rightWall;
 
-int thresholdFrontLeft = 140;//180; //180; //200
-int thresholdFrontRight = 120;//160; //230; //250
+int thresholdFrontLeft = 130;//180; //180; //200
+int thresholdFrontRight = 110;//160; //230; //250
 int thresholdSideLeft = 240;//280;	// Threshold for Wall on side
 int thresholdSideRight = 300;//340;
 int thresholdUpperFront = 1000; //1000; //2200 // Threshold for when mouse close to front wall detecting side walls
@@ -174,7 +174,7 @@ void getSensorError(void) {
 }
 
 void detectWalls() {
-	if (RFSensor > thresholdFrontRight && LFSensor > thresholdFrontLeft) {
+	if (RFSensor > thresholdFrontRight || LFSensor > thresholdFrontLeft) {
 		frontWall = true;
 	}
 	else {

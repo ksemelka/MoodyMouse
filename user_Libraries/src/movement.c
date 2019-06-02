@@ -22,7 +22,7 @@ int T1 = 25;
 int T2 = 65;
 int T3 = 25;
 
-int moveSpeed = 85; // 80
+int moveSpeed = 85;// FAST AND FURIOUS //85 SLOW BUT STEADY;
 int turnSpeed = 37;
 int returnSpeed = 10;
 int stopSpeed = 30;
@@ -33,7 +33,7 @@ double distanceLeftW;
 
 // 43.888 ticks per mm
 int oneCellDistance = 30250;
-int startCellDistance = 9400;
+int startCellDistance = 10600;
 int leftTurnDistance = 20200;
 int rightTurnDistance = 20300;
 
