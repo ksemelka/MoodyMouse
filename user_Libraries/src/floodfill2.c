@@ -87,7 +87,7 @@ void init_costs(void) {
 			maze[i][j].cost = cost;
 			cost += 1;
 		}
-		cost -= 1;
+		cost -= 2;
 	}
 	cost = 7;
 	for (int i = SIZE/2; i < SIZE; ++i) {
@@ -100,7 +100,6 @@ void init_costs(void) {
 			maze[i][j].cost = cost;
 			cost += 1;
 		}
-		cost += 1;
 	}
 	for (int i = 0; i < SIZE; ++i) {
 		for (int j = 0; j < SIZE; ++j) {
