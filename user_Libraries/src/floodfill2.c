@@ -35,45 +35,13 @@ void init_walls(void)
 	
 	// Add borders
 	for (int i = 0; i < SIZE; ++i) {
-		maze[0][i].walls = WEST_WALL;
-		maze[i][SIZE - 1].walls = NORTH_WALL;
-		maze[SIZE - 1][i].walls = EAST_WALL;
-		maze[i][0].walls = SOUTH_WALL;
+		maze[0][i].walls += WEST_WALL;
+		maze[i][SIZE - 1].walls += NORTH_WALL;
+		maze[SIZE - 1][i].walls += EAST_WALL;
+		maze[i][0].walls += SOUTH_WALL;
 	}
 	maze[0][0].walls += EAST_WALL;	// Starting cell wall
 }
-
-/*void init_costs(void) {
-	int cost = 14;
-	for (int i = 0; i < SIZE/2; ++i) {
-		for (int j = 0; j < SIZE/2; ++j) {
-			maze[i][j].cost = cost;
-			cost -= 1;
-		}
-		for (int j = SIZE/2; j < SIZE; ++j) {
-			maze[i][j].cost = cost;
-			cost += 1;
-		}
-		cost -= 1;
-	}
-	for (int i = SIZE/2; i < SIZE; ++i) {
-		for (int j = 0; j < SIZE/2; ++j) {
-			maze[i][j].cost = cost;
-			cost -= 1;
-		}
-		for (int j = SIZE/2; j < SIZE; ++j) {
-			maze[i][j].cost = cost;
-			cost += 1;
-		}
-		cost += 1;
-	}
-	for (int i = 0; i < SIZE; ++i) {
-		for (int j = 0; j < SIZE; ++j) {
-			printf("%d, ", maze[i][j].cost);
-		}
-		printf("\n");
-	}
-}*/
 
 void init_costs(void) {
 	int cost = 14;
@@ -101,12 +69,6 @@ void init_costs(void) {
 			cost += 1;
 		}
 	}
-	for (int i = 0; i < SIZE; ++i) {
-		for (int j = 0; j < SIZE; ++j) {
-			printf("%d, ", maze[i][j].cost);
-		}
-		printf("\n");
-	}
 }
 
 // Add walls to a cell, and all of its adjacent cells
@@ -115,8 +77,7 @@ void add_walls(const int x, const int y, const unsigned char walls)
 	// Make sure x and y are within bounds of the maze
 	if (x < 0 || x >= SIZE || y < 0 || y >= SIZE) {
 		return;
-	} 
-	shortBeep(2000, 3000);
+	}
 	if (walls & NORTH_WALL) {
 		// Add the wall to this cell
 		if (!(maze[x][y].walls & NORTH_WALL)) { // Check if this cell already has this wall
@@ -222,10 +183,11 @@ void flood_fill(void)
 				// Is the cell's value greater than the minimum value of its accessible neighbors?			
 				struct Vertex best_neighbor = least_cost_neighbor(i, j);
 				
-				//printf("%d, ", best_neighbor.cost);
+				//printf("%d, %d ", maze[i][j].cost, best_neighbor.cost);
 
 				// If no, change the cell's value to one greater than the minimum value of its accessible neighbors
-				if (maze[i][j].cost > best_neighbor.cost) {
+				if (maze[i][j].cost <= best_neighbor.cost && maze[i][j].cost != 0) {
+					//printf("x: %d, y: %d, cost: %d\n", i, j, best_neighbor.cost);
 					maze[i][j].cost = best_neighbor.cost + 1;
 					value_incremented = true;
 				}
@@ -237,9 +199,20 @@ void flood_fill(void)
 
 void run_search(void)
 {
-	while (current_x != 7 && current_y != 7) {
+	while (maze[current_x][current_y].cost != 0) {
 		struct Vertex next_cell = least_cost_neighbor(current_x, current_y);
 
+		//printf("%d, %d, %d\n", next_cell.x, next_cell.y, next_cell.cost);
+		
+		/*if (current_x == 6 && current_y == 8) {
+			for (int i = SIZE - 1; i >= 0; --i) {
+				for (int j = 0; j < SIZE; ++j) {
+					printf("%d ", maze[j][i].cost);
+				}
+				printf("\n");
+			}
+		}*/
+		
 		// Move to next cell
 		move_floodfill(next_cell);
 		current_x = next_cell.x;

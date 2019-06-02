@@ -63,8 +63,8 @@ int leftAdjust;
 int rightAdjust;
 void adjuster(void)
 {
-	leftAdjust = 0.25 * (targetFrontLeft- LFSensor);
-	rightAdjust = 0.25 * (targetFrontRight - RFSensor);
+	leftAdjust = 0.1 * (targetFrontLeft- LFSensor);
+	rightAdjust = 0.1 * (targetFrontRight - RFSensor);
 	if (leftAdjust > 150) 
 		leftAdjust = 150;
 	if (rightAdjust > 150)
