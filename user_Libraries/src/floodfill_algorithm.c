@@ -476,6 +476,7 @@ void floodfill_algorithm(void)
 }
 
 void optimal_path(void) {
+	orientation = 0;
 	start_x = 0;
 	start_y = 15;
 	goal_x = 7;
