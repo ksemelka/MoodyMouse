@@ -13,6 +13,8 @@ extern int change_y;
 
 void init_floodfill(void);
 
+void init_cost(void);
+
 void run_search(void);
 
 void run_fast(void);
@@ -23,6 +25,6 @@ void return_to_start(void);
 
 void init_fastest_path(void);
 
-void optimal_path(void);
+//void optimal_path(void);
 
 #endif

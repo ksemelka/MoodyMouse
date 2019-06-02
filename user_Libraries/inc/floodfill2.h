@@ -15,6 +15,7 @@ struct Vertex {
 
 void add_walls(const int x, const int y, const unsigned char walls);
 void init_walls(void);
+void init_costs(void);
 void flood_fill(void);
 
 

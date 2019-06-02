@@ -34,6 +34,32 @@ void init_walls(void)
 	maze[0][0].walls += EAST_WALL;	// Starting cell wall
 }
 
+void init_costs(void) {
+	int cost = 14;
+	for (int i = 0; i < SIZE/2; ++i) {
+		for (int j = 0; j < SIZE/2; ++j) {
+			maze[i][j].cost = cost;
+			cost -= 1;
+		}
+		for (int j = SIZE/2; j < SIZE; ++j) {
+			maze[i][j].cost = cost;
+			cost += 1;
+		}
+		cost -= 1;
+	}
+	for (int i = SIZE/2; i < SIZE; ++i) {
+		for (int j = 0; j < SIZE/2; ++j) {
+			maze[i][j].cost = cost;
+			cost -= 1;
+		}
+		for (int j = SIZE/2; j < SIZE; ++j) {
+			maze[i][j].cost = cost;
+			cost += 1;
+		}
+		cost += 1;
+	}
+}
+
 // Add walls to a cell, and all of its adjacent cells
 void add_walls(const int x, const int y, const unsigned char walls)
 {
