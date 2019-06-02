@@ -53,8 +53,8 @@ void return_to_start(void)
 }
 
 void init_fastest_path(void) {
-    for(i = 0; i <= SIZ; i++) {
-      for(j = 0; j <= SIZ; j++) {
+    for(int i = 0; i <= SIZ; i++) {
+      for(int j = 0; j <= SIZ; j++) {
         f[i][j].x = i;
         f[i][j].y = j;
         if(i == SIZ) {f[i][j].dist = -1;}
@@ -501,7 +501,6 @@ void floodfill_algorithm(void)
 }
 
 void optimal_path(void) {
-{
 	while (!(current_x == goal_x && current_y == goal_y))
 	{
 		//printf("%d, %d\n", current_x, current_y);
@@ -567,7 +566,7 @@ void optimal_path(void) {
 		// 	f[current_x][current_y].visited = false;
 		// }
 
-		if (f[c.x][c.y] == false) {
+		if (f[c.x][c.y].visited == false) {
 			continue;
 		}
 		
@@ -720,3 +719,4 @@ void optimal_path(void) {
 				
 	return;
 }
+

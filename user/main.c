@@ -179,6 +179,7 @@ int main(void) {
 			// displayMatrixScroll("FLOD");
 			LED1_ON;
 			init_floodfill();
+			init_fastest_path();
 			run_search();
 			//chirp();
 			// displayMatrixScroll("RTRN");
