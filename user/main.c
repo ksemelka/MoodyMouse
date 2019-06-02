@@ -187,7 +187,8 @@ int main(void) {
 		else if (selector == 2) {
 			// displayMatrixScroll("FAST");
 			LED1_ON;
-			run_search();
+			// run_search();
+			optimal_path();
 			goto MAIN_MENU;
 		}
 		

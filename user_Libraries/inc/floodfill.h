@@ -38,6 +38,8 @@ void Stack_Init(Stack *);
 
 struct vertex Stack_Top(Stack *S);
 
+struct vertex Stack_Second_Top(Stack *S);
+
 void Stack_Push(Stack *S, struct vertex d);
 
 void Stack_Pop(Stack *S);
