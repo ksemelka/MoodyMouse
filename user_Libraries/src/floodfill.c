@@ -15,6 +15,7 @@ struct vertex c;
 //--- Optimal Path Stack ------ //
 struct Stack optimal;
 Stack* op = &optimal;
+struct graph f[SIZ][SIZ];
 
 void Stack_Init(Stack *S)
 {

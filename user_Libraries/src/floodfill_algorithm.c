@@ -24,6 +24,7 @@ extern bool sensors;
 
 extern struct Stack optimal;
 extern Stack* op;
+extern struct graph f[SIZ][SIZ];
 
 void init_floodfill(void)
 {
@@ -49,6 +50,18 @@ void return_to_start(void)
 	goal_y = 15;
 	Stack_Init(s);
 	floodfill_algorithm();
+}
+
+void init_fastest_path(void) {
+    for(i = 0; i <= SIZ; i++) {
+      for(j = 0; j <= SIZ; j++) {
+        f[i][j].x = i;
+        f[i][j].y = j;
+        if(i == SIZ) {f[i][j].dist = -1;}
+        if(j == SIZ) {f[i][j].dist = -1;}
+        f[i][j].visited = false;
+      }
+    }
 }
 
 void floodfill_algorithm(void)
@@ -311,22 +324,30 @@ void floodfill_algorithm(void)
 			}
 		}*/
 
-		// Storing optimal path
-		// Remove if already traversed before
-		if (Stack_Top(op).x == current_x && Stack_Top(op).y == current_y) {
-			Stack_Pop(op);
+		// // Storing optimal path
+		// // Remove if already traversed before
+		// if (Stack_Top(op).x == current_x && Stack_Top(op).y == current_y) {
+		// 	Stack_Pop(op);
+		// }
+		
+		// if (Stack_Top(op).x == c.x && Stack_Top(op).y == c.y) {
+		// 	//Stack_Pop(op);
+		// }
+		// // Otherwise, add to optimal path
+		// else {
+		// 	struct vertex curr;
+		// 	curr.x = current_x;
+		// 	curr.y = current_y;
+		// 	Stack_Push(op, curr);
+		// 	// Stack_Push(op, c);
+		// }
+
+		if (f[current_x][current_y].visited == false) {
+			f[current_x][current_y].visited = true;
 		}
 		
-		if (Stack_Top(op).x == c.x && Stack_Top(op).y == c.y) {
-			//Stack_Pop(op);
-		}
-		// Otherwise, add to optimal path
-		else {
-			struct vertex curr;
-			curr.x = current_x;
-			curr.y = current_y;
-			Stack_Push(op, curr);
-			// Stack_Push(op, c);
+		if (f[c.x][c.y].visited == true) {
+			f[current_x][current_y].visited = false;
 		}
 		
 		change_x = current_x - c.x;
@@ -480,16 +501,8 @@ void floodfill_algorithm(void)
 }
 
 void optimal_path(void) {
-	orientation = 0;
-	start_x = 0;
-	start_y = 15;
-	goal_x = 7;
-	goal_y = 7;
-	current_x = start_x;
-	current_y = start_y;
-	int pathIndex = 1;
-
-	while (current_x != goal_x || current_y != goal_y)
+{
+	while (!(current_x == goal_x && current_y == goal_y))
 	{
 		//printf("%d, %d\n", current_x, current_y);
 		if ((orientation % 4) < 0)
@@ -500,50 +513,66 @@ void optimal_path(void) {
 		{
 			orientation = orientation % 4;
 		}
-
-		// maze_update returns vertex c
-		//c = floodfill(current_x, current_y);
-
-		if (current_x == 7 || current_x == 8)
+		switch (nextCellState)
 		{
-			if (current_y == 7 || current_y == 8)
-			{
-				targetSpeedX = 0;
-				targetSpeedW = 0;
-				LED_Fancy_On();
-				shortBeep(2000, 3000);
-				LED_Fancy_On();
-				ALL_LED_ON;
-				delay_ms(200);
-				ALL_LED_OFF;
-				delay_ms(200);
-				ALL_LED_ON;
-				delay_ms(200);
-				ALL_LED_OFF;
-				delay_ms(200);
-				ALL_LED_ON;
-				delay_ms(40);
-				resetPID();
-				pid = false;
-				useSensors = false;
-				sensors = false;
-				delay_ms(500000);
-				
-			}
+		case 0:
+			break;
+		case FRONT:
+			maze_wallinput(current_x, current_y, (orientation + 0) % 4);
+			break;
+		case RIGHT:
+			maze_wallinput(current_x, current_y, (orientation + 1) % 4);
+			break;
+		case LEFT:
+			maze_wallinput(current_x, current_y, (orientation + 3) % 4);
+			break;
+		case FRONT + RIGHT:
+			// Front
+			maze_wallinput(current_x, current_y, (orientation + 0) % 4);
+			// Right
+			maze_wallinput(current_x, current_y, (orientation + 1) % 4);
+			break;
+		case FRONT + LEFT:
+			// Front
+			maze_wallinput(current_x, current_y, (orientation + 0) % 4);
+			// Left
+			maze_wallinput(current_x, current_y, (orientation + 3) % 4);
+			break;
+		case RIGHT + LEFT:
+			// Right
+			maze_wallinput(current_x, current_y, (orientation + 1) % 4);
+			// Left
+			maze_wallinput(current_x, current_y, (orientation + 3) % 4);
+			break;
+		case FRONT + RIGHT + LEFT:
+			// Front
+			maze_wallinput(current_x, current_y, (orientation + 0) % 4);
+			// Right
+			maze_wallinput(current_x, current_y, (orientation + 1) % 4);
+			// Left
+			maze_wallinput(current_x, current_y, (orientation + 3) % 4);
+			break;
+		default:
+			break;
 		}
 
-		// // Storing optimal path
-		// // Remove if already traversed before
-		// if (Stack_Top(op).x == c.x && Stack_Top(op).y == c.y) {
-		// 	Stack_Pop(op);
-		// }
-		// // Otherwise, add to optimal path
-		// else {
-		// 	Stack_Push(op, c);
+		// Get the next cell(vertex) which we need to traverse to
+		c = floodfill(current_x, current_y);
+
+		// if (f[current_x][current_y].visited == false) {
+		// 	f[current_x][current_y].visited = true;
 		// }
 		
-		change_x = current_x - op->data[pathIndex].x;
-		change_y = current_y - op->data[pathIndex].y;
+		// if (f[c.x][c.y].visited == true) {
+		// 	f[current_x][current_y].visited = false;
+		// }
+
+		if (f[c.x][c.y] == false) {
+			continue;
+		}
+		
+		change_x = current_x - c.x;
+		change_y = current_y - c.y;
 
 		//printf("..%d, %d\n", c.x, c.y);
 		//		printf("o: %d", orientation);
@@ -554,9 +583,10 @@ void optimal_path(void) {
 			while ((orientation % 4) != 1)
 			{
 				// printf("1: %d\n", orientation);
-				targetSpeedX = 0;
-				useSensors = false;
-				delay_ms(400);
+				if (targetSpeedX > 0) {
+					targetSpeedX = 0;
+					delay_ms(300);
+				}
 				// turnRightPID();
 				if (orientation == 0)
 				{
@@ -580,9 +610,10 @@ void optimal_path(void) {
 		{
 			while ((orientation % 4) != 3)
 			{
-				targetSpeedX = 0;
-				useSensors = false;
-				delay_ms(400);
+				if (targetSpeedX > 0) {
+					targetSpeedX = 0;
+					delay_ms(300);
+				}
 				// turnLeftPID();
 				if (orientation == 0)
 				{
@@ -608,9 +639,10 @@ void optimal_path(void) {
 		{
 			while ((orientation % 4) != 2)
 			{
-				targetSpeedX = 0;
-				useSensors = false;
-				delay_ms(400);
+				if (targetSpeedX > 0) {
+					targetSpeedX = 0;
+					delay_ms(300);
+				}
 
 				// turnLeftPID();
 				if (orientation == 3)
@@ -636,9 +668,10 @@ void optimal_path(void) {
 		{
 			while ((orientation % 4) != 0)
 			{
-				targetSpeedX = 0;
-				useSensors = false;
-				delay_ms(400);
+				if (targetSpeedX > 0) {
+					targetSpeedX = 0;
+					delay_ms(300);
+				}
 				// turnLeftPID();
 				if (orientation == 1)
 				{
@@ -661,9 +694,29 @@ void optimal_path(void) {
 		}
 		moveOneCell();
 
-		current_x = op->data[pathIndex].x;
-		current_y = op->data[pathIndex++].y;
+		current_x = c.x;
+		current_y = c.y;
 	}
-
+	targetSpeedX = 0;
+	targetSpeedW = 0;
+	LED_Fancy_On();
+	shortBeep(2000, 3000);
+	LED_Fancy_On();
+	ALL_LED_ON;
+	delay_ms(200);
+	ALL_LED_OFF;
+	delay_ms(200);
+	ALL_LED_ON;
+	delay_ms(200);
+	ALL_LED_OFF;
+	delay_ms(200);
+	ALL_LED_ON;
+	delay_ms(40);
+	resetPID();
+	// pid = false;
+	// useSensors = false;
+	// sensors = false;
+	delay_ms(3000);
+				
 	return;
 }

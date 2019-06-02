@@ -31,6 +31,7 @@ extern struct vertex c;
 // Used for optimal path
 extern struct Stack optimal;
 extern Stack* op;
+extern struct graph f[SIZ][SIZ];
 
 // void print_maze();
 
