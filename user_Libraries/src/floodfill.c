@@ -34,6 +34,19 @@ struct vertex Stack_Top(Stack *S)
     return S->data[S->size-1];
 }
 
+struct vertex Stack_Second_Top(Stack *S)
+{
+  struct vertex v;
+  v.x = -1;
+  v.y = -1;
+
+    if (S->size < 2) {
+        return v;
+    } 
+
+    return S->data[S->size-2];
+}
+
 void Stack_Push(Stack *S, struct vertex d)
 {
     if (S->size < STACK_MAX)
