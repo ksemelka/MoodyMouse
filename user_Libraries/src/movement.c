@@ -22,7 +22,7 @@ int T1 = 25;
 int T2 = 65;
 int T3 = 25;
 
-int moveSpeed = 85;// FAST AND FURIOUS //85 SLOW BUT STEADY;
+int moveSpeed = 150;// FAST AND FURIOUS //85 SLOW BUT STEADY;
 int turnSpeed = 37;
 int returnSpeed = 10;
 int stopSpeed = 30;
@@ -33,7 +33,7 @@ double distanceLeftW;
 
 // 43.888 ticks per mm
 int oneCellDistance = 30250;
-int startCellDistance = 10600;
+int startCellDistance = 0; // Set in main.c
 int leftTurnDistance = 20200;
 int rightTurnDistance = 20300;
 
@@ -72,21 +72,23 @@ void moveOneCell() {
 			targetSpeedX = 0;
 		}
 
-		/*
-		// DETECT FALLING EDGE OF POSTS
-		if ((curState & LEFT) && !stateUpdated) {
-			// Detect falling edge of left post and update 
-			if (!leftWall) {
-				distanceLeftX = fallingDistance;
-			}
-		}
-		if ((curState & RIGHT) && !stateUpdated) {
-			// Detect falling edge of right post and update distanceLeftX
-			if (!rightWall) {
-				distanceLeftX = fallingDistance;
-			}
-		}
-		*/
+		
+//		// DETECT FALLING EDGE OF POSTS
+//		// If current cell has left wall, we can detect falling edge of post
+//		if ((nextCellState & LEFT) && !stateUpdated) {
+//			// Detect falling edge of left post and update 
+//			if (!leftWall) {
+//				distanceLeftX = fallingDistance;
+//			}
+//		}
+//		// If current cell has right wall, we can detect falling edge of post
+//		if ((nextCellState & RIGHT) && !stateUpdated) {
+//			// Detect falling edge of right post and update distanceLeftX
+//			if (!rightWall) {
+//				distanceLeftX = fallingDistance;
+//			}
+//		}
+		
 
 		/*
 		// DETECT RISING EDGE OF POSTS
@@ -113,12 +115,12 @@ void moveOneCell() {
 			stateUpdated = true;
 		}
 	}
-	while( (encoderCountX - oldEncoderCount < oneCellDistance + startCellDistance)
-		&& LFSensor < targetFrontLeft && RFSensor < targetFrontRight
+	while( ((encoderCountX - oldEncoderCount < oneCellDistance + startCellDistance)
+		&& LFSensor < targetFrontLeft && RFSensor < targetFrontRight)
 		//((encoderCountX - oldEncoderCount < oneCellDistance + startCellDistance) // encoder count hasn't passed oneCellDistance yet AND there is no wall in front
 		//&& LFSensor < targetFrontLeft2 && RFSensor < targetFrontRight2) // There is no wall in front
-		//|| (LFSensor < targetFrontLeft && LFSensor >= targetFrontLeft2) // There is a wall in front but mouse isn't at center of cell yet
-		//|| (RFSensor < targetFrontRight && RFSensor >= targetFrontRight2) // There is a wall in front but mouse isn't at center of cell yet
+		|| (LFSensor < targetFrontLeft && LFSensor >= targetFrontLeft2) // There is a wall in front but mouse isn't at center of cell yet
+		|| (RFSensor < targetFrontRight && RFSensor >= targetFrontRight2) // There is a wall in front but mouse isn't at center of cell yet
 	);
 
 	if (!stateUpdated) {

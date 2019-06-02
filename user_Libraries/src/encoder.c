@@ -22,7 +22,7 @@ double encoderChange;
 int leftEncoderChange;
 int rightEncoderChange;
 
-double oldEncoderCount;
+double oldEncoderCount = 0;
 int leftEncoderOld;
 int rightEncoderOld;
 

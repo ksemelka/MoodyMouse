@@ -96,6 +96,7 @@ int main(void) {
 	pid = false;
 	sensors = false;
 	useSensors = false;
+	startCellDistance = 13600;
 	if (read_Vol_Meter < 2700) {
 		while(1) {
 			displayMatrixScroll("BATT");
