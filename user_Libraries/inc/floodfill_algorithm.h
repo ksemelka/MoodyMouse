@@ -11,6 +11,10 @@ extern int current_y;
 extern int change_x;
 extern int change_y;
 
+void init_floodfill(void);
+
+void run_search(void);
+
 void floodfill_algorithm(void);
 
 void return_to_start(void);

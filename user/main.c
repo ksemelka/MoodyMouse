@@ -93,6 +93,9 @@ int main(void) {
 
 	int selector = 0;
 	MAIN_MENU:
+	pid = false;
+	sensors = false;
+	useSensors = false;
 	if (read_Vol_Meter < 2700) {
 		while(1) {
 			displayMatrixScroll("BATT");
@@ -175,16 +178,16 @@ int main(void) {
 		else if (selector == 1) {
 			// displayMatrixScroll("FLOD");
 			LED1_ON;
-			floodfill_algorithm();
-			// displayMatrixScroll("RTRN");
+			init_floodfill();
+			run_search();
 			chirp();
+			// displayMatrixScroll("RTRN");
 			return_to_start();
 			goto MAIN_MENU;
 		}
 		else if (selector == 2) {
 			// displayMatrixScroll("FAST");
 			LED1_ON;
-			optimal_path();
 			goto MAIN_MENU;
 		}
 		

@@ -25,6 +25,29 @@ extern bool sensors;
 extern struct Stack optimal;
 extern Stack* op;
 
+void init_floodfill(void)
+{
+	init_adjacency();
+	assign_dist();
+	Stack_Init(s);
+}
+
+void run_search(void)
+{
+	current_x = 0;
+	current_y = 15;
+	goal_x = 7;
+	goal_y = 7;
+	floodfill_algorithm();
+}
+
+void return_to_start(void)
+{
+	goal_x = 0;
+	goal_y = 15;
+	floodfill_algorithm();
+}
+
 void floodfill_algorithm(void)
 {
 	/*graph maze(16);
@@ -147,29 +170,25 @@ void floodfill_algorithm(void)
 	//(0,15)	(15,15)
 	//--------------
 
-	init_adjacency();
-	assign_dist();
-	Stack_Init(s);
+//	init_adjacency();
+//	assign_dist();
+//	Stack_Init(s);
 
 	// Init optimal path stack
-	Stack_Init(op);
+	//Stack_Init(op);
 
 	//    Format: (x, y)
 	// pair<int, int> start (0, 0);
 	// pair(int, int) goal (7, 7);
 	// pair(int, int) current(0, 0);
 
-	start_x = 0;
-	start_y = 15;
-	goal_x = 7;
-	goal_y = 7;
-	current_x = start_x;
-	current_y = start_y;
+	//current_x = start_x;
+	//current_y = start_y;
 
-	struct vertex start;
-	start.x = start_x;
-	start.y = start_y;
-	Stack_Push(op, start);
+//	struct vertex start;
+//	start.x = start_x;
+//	start.y = start_y;
+//	Stack_Push(op, start);
 	// Hardcode first cell
 	// Left
 	/*maze_wallinput(current_x, current_y, (orientation + 3) % 4);
@@ -246,7 +265,7 @@ void floodfill_algorithm(void)
 			break;
 		}
 
-		// maze_update returns vertex c
+		// Get the next cell(vertex) which we need to traverse to
 		c = floodfill(current_x, current_y);
 
 		if (current_x == 7 || current_x == 8)
@@ -279,379 +298,16 @@ void floodfill_algorithm(void)
 
 		// Storing optimal path
 		// Remove if already traversed before
-		if (Stack_Top(op).x == c.x && Stack_Top(op).y == c.y) {
+		/*if (Stack_Top(op).x == c.x && Stack_Top(op).y == c.y) {
 			Stack_Pop(op);
-		}
+		}*/
 		// Otherwise, add to optimal path
-		else {
-			Stack_Push(op, c);
-		}
+//		else {
+//			Stack_Push(op, c);
+//		}
 		
 		change_x = current_x - c.x;
 		change_y = current_y - c.y;
-
-		//printf("..%d, %d\n", c.x, c.y);
-		//		printf("o: %d", orientation);
-
-		// Check orientation to make mouse point in correct direction
-		if (change_x == -1) //move East
-		{
-			while ((orientation % 4) != 1)
-			{
-				// printf("1: %d\n", orientation);
-				targetSpeedX = 0;
-				useSensors = false;
-				delay_ms(400);
-				// turnRightPID();
-				if (orientation == 0)
-				{
-					turnRight();
-				}
-				else
-				{
-					turnLeft();
-				}
-				if ((orientation % 4) < 0)
-				{
-					orientation = (orientation % 4) + 4;
-				}
-				else
-				{
-					orientation = orientation % 4;
-				}
-			}
-		}
-		else if (change_x == 1) //move West
-		{
-			while ((orientation % 4) != 3)
-			{
-				targetSpeedX = 0;
-				useSensors = false;
-				delay_ms(400);
-				// turnLeftPID();
-				if (orientation == 0)
-				{
-					turnLeft();
-				}
-				else
-				{
-					turnRight();
-				}
-
-				// printf("2: %d\n", orientation);
-				if ((orientation % 4) < 0)
-				{
-					orientation = (orientation % 4) + 4;
-				}
-				else
-				{
-					orientation = orientation % 4;
-				}
-			}
-		}
-		else if (change_y == -1) //move South
-		{
-			while ((orientation % 4) != 2)
-			{
-				targetSpeedX = 0;
-				useSensors = false;
-				delay_ms(400);
-
-				// turnLeftPID();
-				if (orientation == 3)
-				{
-					turnLeft();
-				}
-				else
-				{
-					turnRight();
-				}
-				// printf("3: %d\n", orientation);
-				if ((orientation % 4) < 0)
-				{
-					orientation = (orientation % 4) + 4;
-				}
-				else
-				{
-					orientation = orientation % 4;
-				}
-			}
-		}
-		else if (change_y == 1) //move North
-		{
-			while ((orientation % 4) != 0)
-			{
-				targetSpeedX = 0;
-				useSensors = false;
-				delay_ms(400);
-				// turnLeftPID();
-				if (orientation == 1)
-				{
-					turnLeft();
-				}
-				else
-				{
-					turnRight();
-				}
-				// printf("4: %d\n", orientation);
-				if ((orientation % 4) < 0)
-				{
-					orientation = (orientation % 4) + 4;
-				}
-				else
-				{
-					orientation = orientation % 4;
-				}
-			}
-		}
-		moveOneCell();
-
-		current_x = c.x;
-		current_y = c.y;
-	}
-
-	return;
-}
-
-void return_to_start(void){
-	start_x = current_x;
-	start_y = current_y;
-	goal_x = 0;		// Starting cell
-	goal_y = 15;
-	// current_x = start_x;
-	// current_y = start_y;
-	int pathIndex = op->size-1;
-
-	while (current_x != goal_x || current_y != goal_y)
-	{
-		//printf("%d, %d\n", current_x, current_y);
-		if ((orientation % 4) < 0)
-		{
-			orientation = (orientation % 4) + 4;
-		}
-		else
-		{
-			orientation = orientation % 4;
-		}
-
-		// maze_update returns vertex c
-		//c = floodfill(current_x, current_y);
-
-		if (current_x == 0 && current_y == 15)
-		{
-			targetSpeedX = 0;
-			targetSpeedW = 0;
-			turnRight();
-			turnRight();
-			LED_Fancy_On();
-			shortBeep(2000, 3000);
-			LED_Fancy_On();
-			ALL_LED_ON;
-			delay_ms(200);
-			ALL_LED_OFF;
-			delay_ms(200);
-			ALL_LED_ON;
-			delay_ms(200);
-			ALL_LED_OFF;
-			delay_ms(200);
-			ALL_LED_ON;
-			delay_ms(40);
-			resetPID();
-			pid = false;
-			useSensors = false;
-			sensors = false;
-			delay_ms(1000);
-		}
-
-		change_x = current_x - op->data[pathIndex].x;
-		change_y = current_y - op->data[pathIndex--].y;
-
-		//printf("..%d, %d\n", c.x, c.y);
-		//		printf("o: %d", orientation);
-
-		// Check orientation to make mouse point in correct direction
-		if (change_x == -1) //move East
-		{
-			while ((orientation % 4) != 1)
-			{
-				// printf("1: %d\n", orientation);
-				targetSpeedX = 0;
-				useSensors = false;
-				delay_ms(400);
-				// turnRightPID();
-				if (orientation == 0)
-				{
-					turnRight();
-				}
-				else
-				{
-					turnLeft();
-				}
-				if ((orientation % 4) < 0)
-				{
-					orientation = (orientation % 4) + 4;
-				}
-				else
-				{
-					orientation = orientation % 4;
-				}
-			}
-		}
-		else if (change_x == 1) //move West
-		{
-			while ((orientation % 4) != 3)
-			{
-				targetSpeedX = 0;
-				useSensors = false;
-				delay_ms(400);
-				// turnLeftPID();
-				if (orientation == 0)
-				{
-					turnLeft();
-				}
-				else
-				{
-					turnRight();
-				}
-
-				// printf("2: %d\n", orientation);
-				if ((orientation % 4) < 0)
-				{
-					orientation = (orientation % 4) + 4;
-				}
-				else
-				{
-					orientation = orientation % 4;
-				}
-			}
-		}
-		else if (change_y == -1) //move South
-		{
-			while ((orientation % 4) != 2)
-			{
-				targetSpeedX = 0;
-				useSensors = false;
-				delay_ms(400);
-
-				// turnLeftPID();
-				if (orientation == 3)
-				{
-					turnLeft();
-				}
-				else
-				{
-					turnRight();
-				}
-				// printf("3: %d\n", orientation);
-				if ((orientation % 4) < 0)
-				{
-					orientation = (orientation % 4) + 4;
-				}
-				else
-				{
-					orientation = orientation % 4;
-				}
-			}
-		}
-		else if (change_y == 1) //move North
-		{
-			while ((orientation % 4) != 0)
-			{
-				targetSpeedX = 0;
-				useSensors = false;
-				delay_ms(400);
-				// turnLeftPID();
-				if (orientation == 1)
-				{
-					turnLeft();
-				}
-				else
-				{
-					turnRight();
-				}
-				// printf("4: %d\n", orientation);
-				if ((orientation % 4) < 0)
-				{
-					orientation = (orientation % 4) + 4;
-				}
-				else
-				{
-					orientation = orientation % 4;
-				}
-			}
-		}
-		moveOneCell();
-
-		current_x = c.x;
-		current_y = c.y;
-	}
-
-	return;
-}
-
-void optimal_path(void) {
-	start_x = 0;
-	start_y = 15;
-	goal_x = 7;
-	goal_y = 7;
-	current_x = start_x;
-	current_y = start_y;
-	int pathIndex = 0;
-
-	while (current_x != goal_x || current_y != goal_y)
-	{
-		if ((orientation % 4) < 0)
-		{
-			orientation = (orientation % 4) + 4;
-		}
-		else
-		{
-			orientation = orientation % 4;
-		}
-
-		// maze_update returns vertex c
-		//c = floodfill(current_x, current_y);
-
-		if (current_x == 7 || current_x == 8)
-		{
-			if (current_y == 7 || current_y == 8)
-			{
-				targetSpeedX = 0;
-				targetSpeedW = 0;
-				LED_Fancy_On();
-				shortBeep(2000, 3000);
-				LED_Fancy_On();
-				ALL_LED_ON;
-				delay_ms(200);
-				ALL_LED_OFF;
-				delay_ms(200);
-				ALL_LED_ON;
-				delay_ms(200);
-				ALL_LED_OFF;
-				delay_ms(200);
-				ALL_LED_ON;
-				delay_ms(40);
-				resetPID();
-				pid = false;
-				useSensors = false;
-				sensors = false;
-				delay_ms(500000);
-				
-			}
-		}
-
-		// // Storing optimal path
-		// // Remove if already traversed before
-		// if (Stack_Top(op).x == c.x && Stack_Top(op).y == c.y) {
-		// 	Stack_Pop(op);
-		// }
-		// // Otherwise, add to optimal path
-		// else {
-		// 	Stack_Push(op, c);
-		// }
-		
-		change_x = current_x - op->data[pathIndex].x;
-		change_y = current_y - op->data[pathIndex++].y;
 
 		//printf("..%d, %d\n", c.x, c.y);
 		//		printf("o: %d", orientation);
