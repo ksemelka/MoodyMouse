@@ -44,6 +44,16 @@ void run_search(void)
 	floodfill_algorithm();
 }
 
+void run_fast(void)
+{
+	orientation = 0;
+	current_x = 0;
+	current_y = 15;
+	goal_x = 7;
+	goal_y = 7;
+	optimal_path();
+}
+
 void return_to_start(void)
 {
 	goal_x = 0;
@@ -228,10 +238,10 @@ void floodfill_algorithm(void)
 	moveOneCell();
 */
 
-	struct vertex start;
-	start.x = start_x;
-	start.y = start_y;
-	Stack_Push(op, start);
+	// struct vertex start;
+	// start.x = start_x;
+	// start.y = start_y;
+	// Stack_Push(op, start);
 
 	while (!(current_x == goal_x && current_y == goal_y))
 	{

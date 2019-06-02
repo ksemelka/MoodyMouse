@@ -190,7 +190,8 @@ int main(void) {
 			// displayMatrixScroll("FAST");
 			LED1_ON;
 			// run_search();
-			optimal_path();
+			// optimal_path();
+			run_fast();
 			goto MAIN_MENU;
 		}
 		

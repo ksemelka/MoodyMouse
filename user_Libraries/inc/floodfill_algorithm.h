@@ -15,6 +15,8 @@ void init_floodfill(void);
 
 void run_search(void);
 
+void run_fast(void);
+
 void floodfill_algorithm(void);
 
 void return_to_start(void);
