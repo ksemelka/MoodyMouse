@@ -22,7 +22,7 @@ int T1 = 25;
 int T2 = 65;
 int T3 = 25;
 
-int moveSpeed = 150;// FAST AND FURIOUS //85 SLOW BUT STEADY;
+int moveSpeed = 135;// FAST AND FURIOUS //85 SLOW BUT STEADY;
 int turnSpeed = 37;
 int returnSpeed = 10;
 int stopSpeed = 30;
