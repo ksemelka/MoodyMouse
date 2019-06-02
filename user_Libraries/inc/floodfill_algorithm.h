@@ -13,6 +13,8 @@ extern int change_y;
 
 void init_floodfill(void);
 
+void init_cost(void);
+
 void run_search(void);
 
 void run_fast(void);
