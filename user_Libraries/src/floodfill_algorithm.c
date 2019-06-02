@@ -76,6 +76,35 @@ void init_fastest_path(void) {
     }
 }
 
+void init_cost(void) {
+	int cost = 14;
+	for (int i = 0; i < SIZE/2; ++i) {
+		for (int j = 0; j < SIZE/2; ++j) {
+			maze[i][j].cost = cost;
+			cost -= 1;
+		}
+		cost += 1;
+		for (int j = SIZE/2; j < SIZE; ++j) {
+			maze[i][j].cost = cost;
+			cost += 1;
+		}
+		cost -= 1;
+	}
+	cost = 7;
+	for (int i = SIZE/2; i < SIZE/ ++i) {
+		for (int j = 0; j < SIZE/2; ++j) {
+			maze[i][j].cost = cost;
+			cost -= 1;
+		}
+		cost += 1;
+		for (int j = SIZE/2; j < SIZE; ++j) {
+			maze[i][j].cost = cost;
+			cost += 1;
+		}
+		cost += 1;
+	}
+}
+
 void floodfill_algorithm(void)
 {
 	/*graph maze(16);
@@ -379,6 +408,7 @@ void floodfill_algorithm(void)
 					delay_ms(300);
 				}
 				// turnRightPID();
+
 				if (orientation == 0)
 				{
 					turnRight();
@@ -387,6 +417,7 @@ void floodfill_algorithm(void)
 				{
 					turnLeft();
 				}
+
 				if ((orientation % 4) < 0)
 				{
 					orientation = (orientation % 4) + 4;
