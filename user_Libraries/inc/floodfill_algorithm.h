@@ -19,6 +19,8 @@ void floodfill_algorithm(void);
 
 void return_to_start(void);
 
+void init_fastest_path(void)
+
 void optimal_path(void);
 
 #endif
