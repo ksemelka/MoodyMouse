@@ -487,7 +487,7 @@ void optimal_path(void) {
 	goal_y = 7;
 	current_x = start_x;
 	current_y = start_y;
-	int pathIndex = 0;
+	int pathIndex = 1;
 
 	while (current_x != goal_x || current_y != goal_y)
 	{
