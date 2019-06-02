@@ -313,7 +313,7 @@ void floodfill_algorithm(void)
 
 		// Storing optimal path
 		// Remove if already traversed before
-		if (Stack_Second_Top(op).x == c.x && Stack_Second_Top(op).y == c.y) {
+		if (Stack_Top(op).x == c.x && Stack_Top(op).y == c.y) {
 			Stack_Pop(op);
 		}
 		// Otherwise, add to optimal path
