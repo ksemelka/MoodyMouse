@@ -51,6 +51,8 @@ void run_fast(void)
 	current_y = 15;
 	goal_x = 7;
 	goal_y = 7;
+	init_floodfill();
+	Stack_Init(s);
 	optimal_path();
 }
 
