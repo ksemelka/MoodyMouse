@@ -6,6 +6,7 @@
 #include "delay.h"
 #include "buzzer.h"
 #include "led.h"
+#include "pwm.h"
 
 /*
 Maze Orientation:
@@ -20,6 +21,8 @@ int current_x = 0; // Initialized to starting cell in maze
 int current_y = 0;
 
 struct Vertex maze[SIZE][SIZE];
+
+extern int selector;
 
 // Initialize walls to be just the borders of the maze.
 void init_walls(void)
@@ -199,6 +202,8 @@ void flood_fill(void)
 
 void run_search(void)
 {
+	current_x = 0;
+	current_y = 0;
 	while (maze[current_x][current_y].cost != 0) {
 		struct Vertex next_cell = least_cost_neighbor(current_x, current_y);
 
@@ -233,8 +238,27 @@ void run_search(void)
 	delay_ms(200);
 	ALL_LED_ON;
 	delay_ms(40);
+	extern bool pid;
+	pid = false;
+	setLeftPwm(0);
+	setRightPwm(0);
 	resetPID();
+	
 	delay_ms(3000);
+}
+
+void return_to_start(void)
+{
+	// Remove all costs of maze
+	for (int i = 0; i < SIZE; ++i) {
+		for (int j = 0; j < SIZE; ++j) {
+			maze[i][j].cost = INF;
+		}
+	}
+	maze[0][0].cost = 0;
+	flood_fill();
+	run_search();
+	turnAround();
 }
 
 void move_floodfill(struct Vertex next_cell)
@@ -247,7 +271,7 @@ void move_floodfill(struct Vertex next_cell)
 		if (orientation != 1) {	// Face east
 			if (targetSpeedX > 0) {
 				targetSpeedX = 0;
-				delay_ms(300);
+				delay_ms(200);
 			}
 			
 			if (orientation == 0) {
@@ -265,7 +289,7 @@ void move_floodfill(struct Vertex next_cell)
 		if (orientation != 3) {	// Face west
 			if (targetSpeedX > 0) {
 				targetSpeedX = 0;
-				delay_ms(300);
+				delay_ms(200);
 			}
 			
 			if (orientation == 0) {
@@ -283,7 +307,7 @@ void move_floodfill(struct Vertex next_cell)
 		if (orientation != 0) {	// Face north
 			if (targetSpeedX > 0) {
 				targetSpeedX = 0;
-				delay_ms(300);
+				delay_ms(200);
 			}
 			
 			if (orientation == 1) {
@@ -301,7 +325,7 @@ void move_floodfill(struct Vertex next_cell)
 		if (orientation != 2) {	// Face south
 			if (targetSpeedX > 0) {
 				targetSpeedX = 0;
-				delay_ms(300);
+				delay_ms(200);
 			}
 			
 			if (orientation == 3) {
@@ -315,7 +339,13 @@ void move_floodfill(struct Vertex next_cell)
 			}
 		}
 	}
-	moveOneCell();
+//	if (selector == 4) {
+//		moveCells();
+//	}
+//	else {
+		moveOneCell();
+
+//	}
 }
 
 void update_walls()

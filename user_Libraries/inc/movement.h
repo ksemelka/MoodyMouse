@@ -20,6 +20,7 @@ extern int oneTurnDistance;
 
 double needToDecelerate(int, double, double);
 void moveOneCell(void);
+void moveCells(int cells);
 void Forward(void);
 void turnLeft(void);
 void turnLeftPID(void);

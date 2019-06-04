@@ -92,11 +92,18 @@ int main(void) {
 	ALL_LED_ON;
 	onTone();
 
+	init_walls();
+	init_costs();
+	
 	selector = 0;
 	MAIN_MENU:
+	setLeftPwm(0);
+	setRightPwm(0);
+	resetPID();
 	pid = false;
 	sensors = false;
 	useSensors = false;
+	resetPID();
 	startCellDistance = 13600;
 	if (read_Vol_Meter < 2700) {
 		while(1) {
@@ -131,18 +138,23 @@ int main(void) {
 
     	delay_ms(50);
 
-		if (rightEncoderCount % 20000 > 15000) {
+		if (rightEncoderCount % 25000 > 20000) {
+			selector = 4; //Faster path
+			displayMatrixScroll("FSTR");
+		}
+		else if (rightEncoderCount % 25000 >= 15000) {
 			selector = 1; //Floodfill
 			displayMatrixScroll("FLOD");
 		}
-		else if (rightEncoderCount % 20000 >= 10000) {
+		else if (rightEncoderCount % 25000 >= 10000) {
 			selector = 2; //Fastest path
 			displayMatrixScroll("FAST");
 		}
-		else if (rightEncoderCount % 20000 >= 5000) {
+		else if (rightEncoderCount % 25000 >= 5000) {
 			selector = 3; //Fastest path
 			displayMatrixScroll("RAND");
 		}
+		
 		else {
 			displayMatrixScroll("SLCT");
 		}
@@ -156,9 +168,10 @@ int main(void) {
 	pid = true;
 	sensors = true;
 	readSensor();
-  	targetLeft = DLSensor;
-  	targetRight = DRSensor;
-  	useSensors = true;
+	targetLeft = DLSensor;
+	targetRight = DRSensor;
+	useSensors = true;
+	oldEncoderCount = encoderCountX;
 	
 	srand(((DLSensor + DRSensor + RFSensor + LFSensor * 128 - 3) % (171 + LFSensor)) * (5221 + DRSensor % 111));
 	resetPID();
@@ -179,27 +192,27 @@ int main(void) {
 		else if (selector == 1) {
 			// displayMatrixScroll("FLOD");
 			LED1_ON;
-			init_walls();
-			init_costs();
 			run_search();
-			
-			/*init_floodfill();
-			init_fastest_path();
-			run_search();*/
-			//chirp();
-			// displayMatrixScroll("RTRN");
+			delay_ms(3000);
 			//return_to_start();
+			
 			goto MAIN_MENU;
 		}
 		else if (selector == 2) {
 			// displayMatrixScroll("FAST");
 			LED1_ON;
-			// run_search();
-			// optimal_path();
-			//run_fast();
+			orientation = 0;
+			run_search();
 			goto MAIN_MENU;
 		}
-		
+		else if (selector == 4) {	// FSTR
+			orientation = 0;
+			LED1_ON;
+			moveSpeed = 155;
+			run_search();
+			moveSpeed = 135;
+			goto MAIN_MENU;
+		}
 		//readSensor();
 		//delay_ms(200);
 //		

@@ -19,6 +19,7 @@ void init_walls(void);
 void init_costs(void);
 void flood_fill(void);
 void run_search(void);
+void return_to_start(void);
 void move_floodfill(struct Vertex next_cell);
 void update_walls(void);
 

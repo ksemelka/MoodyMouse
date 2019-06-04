@@ -56,13 +56,13 @@ void run_fast(void)
 	//optimal_path();
 }
 
-void return_to_start(void)
-{
-	goal_x = 0;
-	goal_y = 15;
-	Stack_Init(s);
-	floodfill_algorithm();
-}
+//void return_to_start(void)
+//{
+//	goal_x = 0;
+//	goal_y = 15;
+//	Stack_Init(s);
+//	floodfill_algorithm();
+//}
 
 void init_fastest_path(void) {
     for(int i = 0; i < SIZ; i++) {

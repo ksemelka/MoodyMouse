@@ -12,7 +12,7 @@ double decW = 1.5;
 
 double sensorFeedback = 0;
 double turnFeedback = 0;
-double sensor_scale = 37;//75
+double sensor_scale = 50;//37;//75
 double turn_scale = 1;
 bool useSensors = false;
 
